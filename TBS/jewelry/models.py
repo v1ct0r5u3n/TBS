@@ -112,7 +112,7 @@ class Accessory(Merchandise):
 	)
 	metal_type = models.CharField(max_length=4,choices = METAL_TYPE,default="")
 	def __str__(self):
-		return "配件"+self.description
+		return self.description
 	class Meta:
 		verbose_name = "配件"
 		verbose_name_plural = verbose_name
@@ -177,10 +177,7 @@ class Pearl(Gem):
 	)
 
 	pearl_type = models.CharField(max_length=4,choices=PEARL_TYPE,default="")
-	PEARL_ALIAS = (
-		("tn","天女"),
-	)
-	pearl_alias = models.CharField(max_length=4,choices=,default="")
+
 	min_size = models.FloatField()
 	max_size = models.FloatField()
 
