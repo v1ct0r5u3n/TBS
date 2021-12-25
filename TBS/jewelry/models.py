@@ -388,7 +388,6 @@ class Order(models.Model):
 	total_count = models.IntegerField("总件数")
 
 	
-
 	deduct = models.FloatField("优惠金额")
 	total_value = models.FloatField("总价")
 
@@ -427,7 +426,43 @@ class Package(models.Model):
 		verbose_name = "包裹"
 		verbose_name_plural = verbose_name
 
+class SalesRecord(models.Model):
+	
+	merchandise = models.ForeignKey(
+		Merchandise,
+		on_delete=models.SET_NULL,
+		blank = False,
+		related_name = "sales_record",
+		verbose_name = "商品"
+	)
+	
+	#简单记录商品信息，一旦商品删除后销售记录仍然可查询
+	description = models.CharField("商品",max_length=100)
+	price = models.FloatField("标价",default=0)
 
+
+	#销售信息
+	deduct = models.FloatField("优惠",default=0)
+	actrual_price = models.FloatField("售价",default = 0)
+	order = models.ForeignKey(
+		Order,
+		on_delete=models.CASCADE,
+		related_name="sales_record",
+		verbose_name="订单"
+	)
+	package = models.ForeignKey(
+		Package,
+		on_delete=models.SET_NULL,
+		blank = True,
+		related_name = "package",
+		verbose_name = "包裹"
+	)
+
+	def __str__(self):
+		return "宝贝"
+	class Meta:
+		verbose_name = "销售记录"
+		verbose_name_plural = verbose_name
 
 #维修单
 class Repair(models.Model):
@@ -456,7 +491,8 @@ class Pay(models.Model):
 		verbose_name = "付款"
 		verbose_name_plural = verbose_name	
 
-class SalesRecord(models.Model):
+#销售分成
+class SalesShare(models.Model):
 	order = models.ForeignKey(
 		Order,
 		on_delete=models.CASCADE,
@@ -466,7 +502,7 @@ class SalesRecord(models.Model):
 	employee = models.ForeignKey(
 		Employee,
 		on_delete=models.CASCADE,
-		related_name="sales_record",
+		related_name="sales_share",
 		verbose_name="销售"
 	)
 	share = models.FloatField("销售额分成")
