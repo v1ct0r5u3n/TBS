@@ -17,6 +17,7 @@ class Person(models.Model):
 	name = models.CharField("姓名",max_length=20)
 	mobile = models.IntegerField("手机")
 	wechat = models.CharField("微信号",max_length=50)
+	alipay = models.CharField("支付宝",max_length=50)
 	def __str__(self):
 		return self.name
 	class Meta:
@@ -91,19 +92,11 @@ class Depot(models.Model):
 		verbose_name = "场所"
 		verbose_name_plural = verbose_name
 
+
+
+
 class Merchandise(models.Model):
-	CERTIFICATE_BY=(
-		("","N/A"),
-		("NJC","中国国家首饰质量检验检测中心(NJC)"),
-		("PSL","日本真珠科学研究所(PSL)"),
-		("PIC","日本真珠综合研究所(PIC)"),
-		("GIA","美国宝石学院(GIA)"),
-		("IGI","国际宝石学院(IGI)"),
-		("AGS","美国宝石学会(AGS)"),
-		("EGL","欧洲宝石学实验室(EGL)"),
-	)
-	certificate_by=models.CharField("证书机构",max_length=5,default="")
-	certificate = models.CharField("证书编号",max_length=50,default="")
+	
 	img = models.ImageFiled("图像")
 
 	description = models.CharField("描述",max_length = 50)
@@ -134,6 +127,33 @@ class Merchandise(models.Model):
 		return self.description
 	class Meta:
 		virtual = True
+
+class Certificate(models.Model):
+	CERTIFICATE_BY=(
+		("","N/A"),
+		("NJC","中国国家首饰质量检验检测中心(NJC)"),
+		("PSL","日本真珠科学研究所(PSL)"),
+		("PEPCA","日本真珠输出加工协同组合(PEPCA)"),
+		("PIC","日本真珠综合研究所(PIC)"),
+		("GIA","美国宝石学院(GIA)"),
+		("IGI","国际宝石学院(IGI)"),
+		("AGS","美国宝石学会(AGS)"),
+		("EGL","欧洲宝石学实验室(EGL)"),
+	)
+	issuer = models.CharField("颁发机构",max_length=5,default="")
+	code = models.CharField("证书编号",max_length=50,default="")
+	merchandise = models.ForeignKey(
+		Merchandise,
+		on_delete=models.CASCADE,
+		blank=False,
+		related_name = "certificate",
+		verbose_name = "证书",
+	)
+	def __str__(self):
+		return self.issuer+":"+code
+	class Meta:
+		verbose_name = "证书"
+		verbose_name_plural = verbose_name
 
 class Accessory(Merchandise):
 	METAL_TYPE = (
@@ -357,7 +377,15 @@ class Customer(Person):
 
 class Order(models.Model):
 	'''订单.'''
-	order_id = models.BigAutoField(primary_key=True)
+	order_id = models.BigAutoField("订单号",primary_key=True)
+	customer = models.ForeignKey(
+		Customer,
+		on_delete=models.PROTECT,
+		blank=False,
+		related_name = "order",
+		verbose_name = "顾客",
+	)
+
 	order_date = models.DateTimeField("订单日期",default=timezone.now)
 	total_count = models.IntegerField("总件数")
 
@@ -375,14 +403,19 @@ class Order(models.Model):
 
 	comments = models.TextField("备注",blank = True,default = "",max_length=100)
 
-	ORDER_STATUS = (("A","新订单"),("B","已付款"),("C","已发货"),("D","已收货"),("E","已关闭"))
-	order_status = models.CharField(max_length=1,choices=ORDER_STATUS)
+	is_payed = models.BooleanField("付款",default = False)
+	is_shiped = models.BooleanField("发货",default = False)
+	is_recieved = models.BooleanField("签收",default = False)
 
 	def __str__(self):
 		return str(self.order_id)
 	class Meta:
 		verbose_name = "订单"
 		verbose_name_plural = verbose_name
+
+#维修单
+class Repair(models.Model):
+	pass
 
 class Pay(models.Model):
 	PAY_TYPE = (
@@ -401,7 +434,11 @@ class Pay(models.Model):
 	amount = models.FloatField("付款金额",default=order.total_value)
 	pay_time = models.DateTimeField("付款时间",default = timezone.now)
 	img = models.ImageFiled("截图",blank=True)
-	
+	def __str__(self):
+		return str(self.order_id)
+	class Meta:
+		verbose_name = "付款"
+		verbose_name_plural = verbose_name	
 
 class SalesRecord(models.Model):
 	order = models.ForeignKey(
@@ -424,5 +461,36 @@ class SalesRecord(models.Model):
 	class Meta:
 		verbose_name = "销售记录"
 		verbose_name_plural = verbose_name
+
+
+class Charge(models.Model):
+	pass
+
+#调货单
+class Transfer(models.Model):
+	merchandise = models.ManyToManyField(Merchandise)
+	source = models.ForeignKey(Depot,on_delete=models.PROTECT,blank=False)
+	destination = models.ForeignKey(Depot,on_delete=models.PROTECT,blank=False)
+
+	def __str__(self):
+		return source.lable+"->"+destination.lable+":"+str(merchandise.objects.count())
+
+	class Meta:
+		verbose_name = "调货单"
+		verbose_name_plural = verbose_name
+
+
+#借货单
+class Lend(models.Model):
+	pass
+
+#加工单
+class Maintain(models.Model):
+	pass
+
+#盘点单
+class StockCheck(models.Model):
+	pass
+
 
 	
