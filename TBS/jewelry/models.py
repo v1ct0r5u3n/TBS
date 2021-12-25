@@ -93,8 +93,6 @@ class Depot(models.Model):
 		verbose_name_plural = verbose_name
 
 
-
-
 class Merchandise(models.Model):
 	
 	img = models.ImageFiled("图像")
@@ -389,17 +387,10 @@ class Order(models.Model):
 	order_date = models.DateTimeField("订单日期",default=timezone.now)
 	total_count = models.IntegerField("总件数")
 
-	ship_fee = models.FloatField("运费")
-	packaging = models.FloatField("包装费")
-	insurance = models.FloatField("保险")
-	other_fee = models.FloatField("其它")
+	
 
 	deduct = models.FloatField("优惠金额")
 	total_value = models.FloatField("总价")
-
-	ship_date = models.DateTimeField("发货日期",null = True,default = null)
-	carrier = models.CharField("承运",blank=True,default="自提",max_length=20)
-	track_no = models.CharField("运单号",blank = True,default = "",max_length=20)
 
 	comments = models.TextField("备注",blank = True,default = "",max_length=100)
 
@@ -412,6 +403,31 @@ class Order(models.Model):
 	class Meta:
 		verbose_name = "订单"
 		verbose_name_plural = verbose_name
+
+class Package(models.Model):
+	ship_date = models.DateTimeField("发货日期",null = True,default = null)
+	carrier = models.CharField("承运",blank=True,default="自提",max_length=20)
+	track_no = models.CharField("运单号",blank = True,default = "",max_length=20)
+	gross_weight = models.FloatField("毛重",default=0)
+
+	ship_fee = models.FloatField("运费")
+	packaging = models.FloatField("包装费")
+	insurance = models.FloatField("保险")
+	other_fee = models.FloatField("其它")
+
+	order = models.ForeignKey(
+		Order,
+		on_delete=models.CASCADE,
+		related_name = "package",
+		verbose_name = "包裹"
+	)
+	def __str__(self):
+		return "包裹"
+	class Meta:
+		verbose_name = "包裹"
+		verbose_name_plural = verbose_name
+
+
 
 #维修单
 class Repair(models.Model):
