@@ -92,6 +92,7 @@ class Merchandise(models.Model):
 	#class Meta:
 	#	abstract = True
 
+
 class Certificate(models.Model):
 	CERTIFICATE_BY=(
 		("","N/A"),
@@ -175,7 +176,7 @@ class Accessory(Merchandise):
 		("","N/A")
 	)
 	metal_type = models.CharField(max_length=4,choices = METAL_TYPE,default="")
-	jewel = models.ForeignKey(
+	belongs_to_jewel = models.ForeignKey(
 		Jewel,
 		null = True,
 		blank = True,
@@ -194,27 +195,26 @@ class Accessory(Merchandise):
 
 class Gem(Merchandise):
 
-	accessory = models.ForeignKey(
+	belongs_to_accessory = models.ForeignKey(
 		Accessory,
 		null = True,
 		blank = True,
 		on_delete=models.SET_NULL,
-		related_name = "sub_gem",
+		related_name = "gem",
 		verbose_name = "所属空托或配件",
 		help_text = "如果是配石"
 	)
 
-	jewel = models.ForeignKey(
+	belongs_to_jewel = models.ForeignKey(
 		Jewel,
 		null = True,
 		blank = True,
 		on_delete = models.SET_NULL,
-		related_name = "main_gem",
+		related_name = "gem",
 		verbose_name = "所属成品",
 		help_text = "如果是主石"
 	)
-	#class Meta:
-	#	abstract = True
+
 '''
 size, 直径
 shape, 形状
