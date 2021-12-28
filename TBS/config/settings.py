@@ -31,14 +31,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'user.apps.UserConfig',
+    'jewelry.apps.JewelryConfig',
+    'b2c.apps.B2CConfig',
+    'salary.apps.SalaryConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'jewelry.apps.JewelryConfig',
-    'salary.apps.SalaryConfig',
 ]
 
 MIDDLEWARE = [

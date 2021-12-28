@@ -2,54 +2,9 @@
 from django.db import models
 from datetime import date
 from django.utils import timezone
-
+from user.models import Person,Address,Customer
 # Create your models here.
-class Area(models.Model):
-	name = models.CharField("名称",max_length=20)
-	parent=models.ForeignKey("self",on_delete=models.SET_NULL,null=True,blank=True,verbose_name="所属")
-	def __str__(self):
-		return self.name
-	class Meta:
-		verbose_name = "省市区"
-		verbose_name_plural = verbose_name
 
-class Person(models.Model):
-	name = models.CharField("姓名",max_length=20)
-	mobile = models.IntegerField("手机")
-	wechat = models.CharField("微信号",max_length=50)
-	alipay = models.CharField("支付宝",max_length=50)
-	def __str__(self):
-		return self.name
-	class Meta:
-		virtual = True
-
-class Address(models.Model):
-	default = models.BooleanField("默认地址",default=True)
-	lable = models.CharField("标签",max_length=20,blank=True,default="")
-	person = models.ForeignKey(
-		Person,
-		on_delete=models.CASCADE,
-		null=True,
-		blank=True,
-		related_name="address",
-		verbose_name="联系人",
-	)
-	name = models.CharField("收货人",max_length=20)
-	phone = models.CharField("电话",max_length=20)
-	area = models.ForeignKey(
-		Area,
-		on_delete=models.SET_NULL,
-		null=True,
-		blank=True,
-		related_name = "more_detail",
-		verbose_name="上级省市区",
-	)
-	detail = models.CharField("详细地址",max_length=200)
-	def __str__(self):
-		return self.lable
-	class Meta:
-		verbose_name = "地址"
-		verbose_name_plural = verbose_name
 
 class Depot(models.Model):
 	SUPPLIER = 'SL'
@@ -74,7 +29,7 @@ class Depot(models.Model):
 		on_delete=models.SET_NULL,
 		null=True,
 		blank=True,
-		related_name = "charged_depot",
+		related_name = "+",
 		verbose_name = "联系人"
 	)
 	address = models.ForeignKey(
@@ -82,7 +37,7 @@ class Depot(models.Model):
 		on_delete=models.SET_NULL,
 		null=True,
 		blank=True,
-		related_name = "depot",
+		related_name = "+",
 		verbose_name = "地址"
 	)
 	
@@ -95,7 +50,7 @@ class Depot(models.Model):
 
 class Merchandise(models.Model):
 	
-	img = models.ImageFiled("图像")
+	img = models.ImageField("图像")
 
 	description = models.CharField("描述",max_length = 50)
 	net_weight = models.FloatField("净重")
@@ -103,28 +58,39 @@ class Merchandise(models.Model):
 	sku = models.CharField(
 		"款号",
 		max_length = 20,
-		help_text = "配对的两颗宝石拥有相同sku"+
-					"整包裸石拥有相同的sku"+
-					"套装成品拥有相同的sku"+
-					"同款多件拥有相同的sku"
+		help_text = "配对的两颗宝石拥有相同sku;"+
+					"整包裸石拥有相同的sku;"+
+					"套装成品拥有相同的sku;"+
+					"同款多件拥有相同的sku。"
 	)
 	sku_count = models.IntegerField("同款",default=1)
 	sku_description = models.CharField("款式",max_length=20)
 	
-	supplier = models.ForeignKey('Depot',on_delete=models.SET_NULL,null=True,verbose_name="供货商")
+	supplier = models.ForeignKey(
+		Depot,
+		on_delete=models.SET_NULL,
+		null=True,
+		related_name = "supplies",
+		verbose_name="供货商"
+	)
 	supply_date = models.DateTimeField("入库时间",default = timezone.now)
 	manufacture = models.CharField("产地",max_length=10)
 	cost = models.FloatField("成本")
 	
-	depot = models.ForeignKey(Depot,on_delete=models.SET_NULL,null=True)
+	depot = models.ForeignKey(
+		Depot,
+		on_delete=models.SET_NULL,
+		null=True,
+		related_name = "instock"
+	)
 	price = models.FloatField("标价")
 	margin = models.FloatField("价格浮动")
 
 	deleted = models.BooleanField(default=False)
 	def __str__(self):
 		return self.description
-	class Meta:
-		virtual = True
+	#class Meta:
+	#	abstract = True
 
 class Certificate(models.Model):
 	CERTIFICATE_BY=(
@@ -153,6 +119,42 @@ class Certificate(models.Model):
 		verbose_name = "证书"
 		verbose_name_plural = verbose_name
 
+class Jewel(Merchandise):
+	JEWEL_TYPE = (
+		("","N/A"),
+		("R","戒指"),
+		("项链",(
+			("P","项坠"),
+			("N","珠链"),
+		)),
+		("耳饰",(
+			("D","耳钉"),
+			("G","耳钩"),
+			("X","耳线"),
+			("J","耳夹"),
+		)),
+		("W","手链"),
+		("B","胸针"),
+		("H","头饰"),
+	)
+	
+	jewel_type = models.CharField(max_length=5,choices=JEWEL_TYPE,default="")
+	style = models.CharField(
+		"风格",
+		max_length = 100,
+		blank = True,
+		default = "",
+		help_text = "工艺或风格系列，例如花丝、满天星"
+	)
+
+	def __str__(self):
+		return "成品"+self.description
+	class Meta:
+		verbose_name = "成品"
+		verbose_name_plural = verbose_name
+	
+
+
 class Accessory(Merchandise):
 	METAL_TYPE = (
 		("PT","铂金"),
@@ -173,6 +175,15 @@ class Accessory(Merchandise):
 		("","N/A")
 	)
 	metal_type = models.CharField(max_length=4,choices = METAL_TYPE,default="")
+	jewel = models.ForeignKey(
+		Jewel,
+		null = True,
+		blank = True,
+		on_delete = models.SET_NULL,
+		related_name = "accessory",
+		verbose_name = "所属成品",
+	)
+
 	def __str__(self):
 		return self.description
 	class Meta:
@@ -184,9 +195,9 @@ class Accessory(Merchandise):
 class Gem(Merchandise):
 
 	accessory = models.ForeignKey(
-		"Accessory",
+		Accessory,
 		null = True,
-		default = NULL,
+		blank = True,
 		on_delete=models.SET_NULL,
 		related_name = "sub_gem",
 		verbose_name = "所属空托或配件",
@@ -194,16 +205,16 @@ class Gem(Merchandise):
 	)
 
 	jewel = models.ForeignKey(
-		"Jewel",
+		Jewel,
 		null = True,
-		default = NULL,
+		blank = True,
 		on_delete = models.SET_NULL,
 		related_name = "main_gem",
 		verbose_name = "所属成品",
 		help_text = "如果是主石"
 	)
-	class Meta:
-		virtual = True
+	#class Meta:
+	#	abstract = True
 '''
 size, 直径
 shape, 形状
@@ -302,227 +313,23 @@ class Diamond(Gem):
 class PriceCategory(models.Model):
 	description = models.CharField(max_length = 50)
 
-class Jewel(Merchandise):
-	JEWEL_TYPE = (
-		("","N/A"),
-		("R","戒指"),
-		("项链",(
-			("P","项坠"),
-			("N","珠链"),
-		)),
-		("耳饰",(
-			("D","耳钉"),
-			("G","耳钩"),
-			("X","耳线"),
-			("J","耳夹"),
-		)),
-		("W","手链"),
-		("B","胸针"),
-		("H","头饰"),
-	)
-	
-	jewel_type = models.CharField(max_length=5,choices=JEWEL_TYPE,default="")
-	style = models.CharField(
-		"风格",
-		max_length = 100,
-		blank = True,
-		default = "",
-		help_text = "工艺或风格系列，例如花丝、满天星"
-	)
-
-	def __str__(self):
-		return "成品"+self.description
-	class Meta:
-		verbose_name = "成品"
-		verbose_name_plural = verbose_name
-	
-class Person(models.Model):
-	name = models.CharField("姓名",max_length=20)
-	mobile = models.IntegerField("手机")
-	wechat = models.CharField("微信号",max_length=50)
-	address = models.ForeignKey(Address,on_delete=models.SET_NULL,null=True,blank=True,verbose_name="地址")
-	def __str__(self):
-		return self.name
-	class Meta:
-		virtual = True
-
-class Employee(Person):
-	'''员工.'''
-	class Meta:
-		verbose_name = "员工"
-		verbose_name_plural = verbose_name
-	
-
-class CustomerRank(models.Model):
-	name = models.CharField(max_length=20)
-	level = models.PositiveSmallIntegerField(default=1)
-	class Meta:
-		verbose_name = "VIP等级"
-		verbose_name_plural = verbose_name
-
-
-class Customer(Person):
-	'''顾客.'''
-	rank = models.ForeignKey(CustomerRank,on_delete = models.SET_NULL,null=True)
-	balance = models.FloatField("余额",default=0)
-	due = models.FloatField("欠款",default=0)
-
-	Employee = models.ForeignKey(Employee,on_delete=models.SET_NULL,null=True,verbose_name="专属客服")
-
-	class Meta:
-		verbose_name = "顾客"
-		verbose_name_plural = verbose_name
-
-class Order(models.Model):
-	'''订单.'''
-	order_id = models.BigAutoField("订单号",primary_key=True)
-	customer = models.ForeignKey(
-		Customer,
-		on_delete=models.PROTECT,
-		blank=False,
-		related_name = "order",
-		verbose_name = "顾客",
-	)
-
-	order_date = models.DateTimeField("订单日期",default=timezone.now)
-	total_count = models.IntegerField("总件数")
-
-	
-	deduct = models.FloatField("优惠金额")
-	total_value = models.FloatField("总价")
-
-	comments = models.TextField("备注",blank = True,default = "",max_length=100)
-
-	is_payed = models.BooleanField("付款",default = False)
-	is_shiped = models.BooleanField("发货",default = False)
-	is_recieved = models.BooleanField("签收",default = False)
-
-	def __str__(self):
-		return str(self.order_id)
-	class Meta:
-		verbose_name = "订单"
-		verbose_name_plural = verbose_name
-
-class Package(models.Model):
-	ship_date = models.DateTimeField("发货日期",null = True,default = null)
-	carrier = models.CharField("承运",blank=True,default="自提",max_length=20)
-	track_no = models.CharField("运单号",blank = True,default = "",max_length=20)
-	gross_weight = models.FloatField("毛重",default=0)
-
-	ship_fee = models.FloatField("运费")
-	packaging = models.FloatField("包装费")
-	insurance = models.FloatField("保险")
-	other_fee = models.FloatField("其它")
-
-	order = models.ForeignKey(
-		Order,
-		on_delete=models.CASCADE,
-		related_name = "package",
-		verbose_name = "包裹"
-	)
-	def __str__(self):
-		return "包裹"
-	class Meta:
-		verbose_name = "包裹"
-		verbose_name_plural = verbose_name
-
-class SalesRecord(models.Model):
-	
-	merchandise = models.ForeignKey(
-		Merchandise,
-		on_delete=models.SET_NULL,
-		blank = False,
-		related_name = "sales_record",
-		verbose_name = "商品"
-	)
-	
-	#简单记录商品信息，一旦商品删除后销售记录仍然可查询
-	description = models.CharField("商品",max_length=100)
-	price = models.FloatField("标价",default=0)
-
-
-	#销售信息
-	deduct = models.FloatField("优惠",default=0)
-	actrual_price = models.FloatField("售价",default = 0)
-	order = models.ForeignKey(
-		Order,
-		on_delete=models.CASCADE,
-		related_name="sales_record",
-		verbose_name="订单"
-	)
-	package = models.ForeignKey(
-		Package,
-		on_delete=models.SET_NULL,
-		blank = True,
-		related_name = "package",
-		verbose_name = "包裹"
-	)
-
-	def __str__(self):
-		return "宝贝"
-	class Meta:
-		verbose_name = "销售记录"
-		verbose_name_plural = verbose_name
-
-#维修单
-class Repair(models.Model):
-	pass
-
-class Pay(models.Model):
-	PAY_TYPE = (
-		("CASH","现金"),
-		("BANK","银行转账"),
-		("CRED","信用卡付款"),
-		("WXZF","微信支付"),
-		("WXZZ","微信转账"),
-		("WXHB","微信红包"),
-		("APZF","支付宝支付"),
-		("APZZ","支付宝转账"),
-		("BLCE","店内余额"),
-	)
-	
-	order = models.ForeignKey(Order,on_delete=models.SET_NULL,related_name="pay",verbose_name="订单")
-	amount = models.FloatField("付款金额",default=order.total_value)
-	pay_time = models.DateTimeField("付款时间",default = timezone.now)
-	img = models.ImageFiled("截图",blank=True)
-	def __str__(self):
-		return str(self.order_id)
-	class Meta:
-		verbose_name = "付款"
-		verbose_name_plural = verbose_name	
-
-#销售分成
-class SalesShare(models.Model):
-	order = models.ForeignKey(
-		Order,
-		on_delete=models.CASCADE,
-		related_name="sales_record",
-		verbose_name="订单"
-	)
-	employee = models.ForeignKey(
-		Employee,
-		on_delete=models.CASCADE,
-		related_name="sales_share",
-		verbose_name="销售"
-	)
-	share = models.FloatField("销售额分成")
-
-	def __str__(self):
-		return str(self.order.order_id)+":"+str(self.share*100)+r"%"
-
-	class Meta:
-		verbose_name = "销售记录"
-		verbose_name_plural = verbose_name
-
-
-class Charge(models.Model):
-	pass
 
 #调货单
 class Transfer(models.Model):
+	datetime = models.DateTimeField("付款时间",default = timezone.now)
 	merchandise = models.ManyToManyField(Merchandise)
-	source = models.ForeignKey(Depot,on_delete=models.PROTECT,blank=False)
-	destination = models.ForeignKey(Depot,on_delete=models.PROTECT,blank=False)
+	source = models.ForeignKey(
+		Depot,
+		on_delete=models.PROTECT,
+		blank=False,
+		related_name = "+",
+	)
+	destination = models.ForeignKey(
+		Depot,
+		on_delete=models.PROTECT,
+		blank=False,
+		related_name = "+",
+	)
 
 	def __str__(self):
 		return source.lable+"->"+destination.lable+":"+str(merchandise.objects.count())
@@ -541,8 +348,5 @@ class Maintain(models.Model):
 	pass
 
 #盘点单
-class StockCheck(models.Model):
+class StockTake(models.Model):
 	pass
-
-
-	
