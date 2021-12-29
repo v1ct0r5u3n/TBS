@@ -74,14 +74,16 @@ class Merchandise(models.Model):
 		verbose_name="供货商"
 	)
 	supply_date = models.DateTimeField("入库时间",default = timezone.now)
-	manufacture = models.CharField("产地",max_length=10)
+	sku_by_supplier = models.CharField("供应商条码",max_length=20,blank=True)
+	manufacture = models.CharField("产地",max_length=10,blank=True)
 	cost = models.FloatField("成本")
 	
 	depot = models.ForeignKey(
 		Depot,
 		on_delete=models.SET_NULL,
 		null=True,
-		related_name = "instock"
+		related_name = "instock",
+		verbose_name = "场所"
 	)
 	price = models.FloatField("标价")
 	margin = models.FloatField("价格浮动")
@@ -261,13 +263,19 @@ class Pearl(Gem):
 	iridescence = models.CharField("晕彩",max_length=1,choices=IRIDESCENCE,default="")
 
 	LUSTER = (("","N/A"),("A","极强"),("B","强"),("C","中"),("D","弱"))
-	luster = models.CharField(max_length=1,choices=LUSTER)
+	luster = models.CharField("光泽",max_length=1,choices=LUSTER)
 
 	SURFACE = (("","N/A"),("A","无瑕"),("B","微瑕"),("C","小瑕"),("D","瑕疵"),("E","重瑕"))
-	surface = models.CharField(max_length=1,choices=SURFACE)
+	surface = models.CharField("表皮",max_length=1,choices=SURFACE)
 
 	NACRE = (("","N/A"),("A","特厚"),("B","厚"),("C","中"),("D","薄"),("E","极薄"))
-	nacre = models.CharField(max_length=1,choices=NACRE)
+	nacre = models.CharField("珠层",max_length=1,choices=NACRE)
+
+	def __str__(self):
+		return "珍珠"
+	class Meta:
+		verbose_name = "珍珠"
+		verbose_name_plural = verbose_name
 
 class Diamond(Gem):
 	COLOR = (
@@ -281,7 +289,7 @@ class Diamond(Gem):
 		("J","J"),
 		("K","K"),
 	)
-	color = models.CharField(max_length=1,choices=COLOR,default="")
+	color = models.CharField("颜色",max_length=1,choices=COLOR,default="")
 
 	CLARITY = (
 		("","N/A"),
@@ -294,7 +302,7 @@ class Diamond(Gem):
 		("SI1","SI1"),
 		("SI2","SI2"),
 	)
-	clarity = models.CharField(max_length=4,choices=CLARITY,default="")
+	clarity = models.CharField("净度",max_length=4,choices=CLARITY,default="")
 
 	CUT = (
 		("","N/A"),
@@ -302,7 +310,7 @@ class Diamond(Gem):
 		("VG","VG"),
 		("G","G"),
 	)
-	cut = models.CharField(max_length=2,choices=CUT,default="")
+	cut = models.CharField("切工",max_length=2,choices=CUT,default="")
 	def __str__(self):
 		return "钻石"+"{.2f}".format(self.net_weight/0.2)+"ct"
 	class Meta:
