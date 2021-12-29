@@ -4,3 +4,4 @@ from django.apps import AppConfig
 class B2CConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'b2c'
+    verbose_name = '销售'

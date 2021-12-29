@@ -74,7 +74,7 @@ class Merchandise(models.Model):
 		verbose_name="供货商"
 	)
 	supply_date = models.DateTimeField("入库时间",default = timezone.now)
-	sku_by_supplier = models.CharField("供应商条码",max_length=20,blank=True)
+	sku_by_supplier = models.CharField("厂家款号",max_length=20,blank=True)
 	manufacture = models.CharField("产地",max_length=10,blank=True)
 	cost = models.FloatField("成本")
 	

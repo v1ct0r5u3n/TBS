@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
+import time
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +32,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'simpleui',
     'user.apps.UserConfig',
     'jewelry.apps.JewelryConfig',
     'b2c.apps.B2CConfig',
@@ -132,3 +134,82 @@ STATIC_ROOT = BASE_DIR / 'static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/login'
+
+SIMPLEUI_HOME_TITLE = 'GEMYARD'
+
+SIMPLEUI_HOME_ICON = 'fa fa-user'
+#SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
+SIMPLEUI_HOME_INFO = False
+SIMPLEUI_ANALYSIS = False
+
+
+SIMPLEUI_ICON = {
+    #'系统管理': 'fab fa-apple',
+    '钻石': 'fas fa-gem',
+    '付款': 'fas fa-credit-card',
+    '包裹': 'fas fa-archive',
+    '退款': 'fas fa-hand-holding-usd',
+    '场所': 'fas fa-store',
+    '销售分成': 'fas fa-balance-scale',
+    '配件': 'fas fa-link',
+    '珍珠': 'fas fa-circle',
+    '成品': 'fas fa-tag',
+    '顾客': 'fas fa-shopping-bag',
+    '人员': 'fas fa-user-friends',
+    '证书': 'fas fa-certificate',
+}
+
+'''
+SIMPLEUI_CONFIG = {
+    'system_keep': False,
+    'menu_display': ['Simpleui', '测试', '权限认证', '动态菜单测试'],      # 开启排序和过滤功能, 不填此字段为默认排序和全部显示, 空列表[] 为全部不显示.
+    'dynamic': True,    # 设置是否开启动态菜单, 默认为False. 如果开启, 则会在每次用户登陆时动态展示菜单内容
+    'menus': [{
+        'name': 'Simpleui',
+        'icon': 'fas fa-code',
+        'url': 'https://gitee.com/tompeppa/simpleui'
+    }, {
+        'app': 'auth',
+        'name': '权限认证',
+        'icon': 'fas fa-user-shield',
+        'models': [{
+            'name': '用户',
+            'icon': 'fa fa-user',
+            'url': 'auth/user/'
+        }]
+    }, {
+        # 自2021.02.01+ 支持多级菜单，models 为子菜单名
+        'name': '多级菜单测试',
+        'icon': 'fa fa-file',
+        # 二级菜单
+        'models': [{
+            'name': 'Baidu',
+            'icon': 'far fa-surprise',
+            # 第三级菜单 ，
+            'models': [
+                {
+                  'name': '爱奇艺',
+                  'url': 'https://www.iqiyi.com/dianshiju/'
+                  # 第四级就不支持了，element只支持了3级
+                }, {
+                    'name': '百度问答',
+                    'icon': 'far fa-surprise',
+                    'url': 'https://zhidao.baidu.com/'
+                }
+            ]
+        }, {
+            'name': '内网穿透',
+            'url': 'https://www.wezoz.com',
+            'icon': 'fab fa-github'
+        }]
+    }, {
+        'name': '动态菜单测试' ,
+        'icon': 'fa fa-desktop',
+        'models': [{
+            'name': time.time(),
+            'url': 'http://baidu.com',
+            'icon': 'far fa-surprise'
+        }]
+    }]
+}
+'''

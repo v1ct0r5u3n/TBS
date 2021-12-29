@@ -67,7 +67,7 @@ class SalesRecord(models.Model):
 	)
 	
 	#简单记录商品信息，一旦商品删除后销售记录仍然可查询
-	description = models.CharField("商品",max_length=100)
+	description = models.CharField("商品描述",max_length=100)
 	price = models.FloatField("标价",default=0)
 
 	#销售信息
