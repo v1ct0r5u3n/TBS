@@ -58,7 +58,7 @@ class Address(models.Model):
 		
 class Person(models.Model):
 	name = models.CharField("姓名",max_length=20)
-	mobile = models.IntegerField("手机")
+	mobile = models.CharField("手机",max_length=20)
 	wechat = models.CharField("微信号",max_length=50)
 	address = models.ForeignKey(Address,on_delete=models.SET_NULL,null=True,blank=True,verbose_name="地址")
 	def __str__(self):
