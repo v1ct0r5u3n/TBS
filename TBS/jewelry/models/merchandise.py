@@ -5,54 +5,9 @@ from django.utils import timezone
 from user.models import Person,Address,Customer
 # Create your models here.
 
-
-class Depot(models.Model):
-	SUPPLIER = 'SL'
-	WAREHOUSE = 'WH'
-	RETAIL_STORE = 'ST'
-	AGENT = 'AG'
-	MAINTENANCE = 'MT'
-
-	DEPOT_TYPE = [
-		(SUPPLIER,'供应商'),
-		(WAREHOUSE,'仓库'),
-		(RETAIL_STORE,'直营店'),
-		(AGENT,'代理商'),
-		(MAINTENANCE,'维修厂'),
-	]
-
-	lable = models.CharField("名称",max_length=20)
-
-	depot_type = models.CharField(max_length=2,choices=DEPOT_TYPE,blank=False,default=WAREHOUSE)
-	contact = models.ForeignKey(
-		Person,
-		on_delete=models.SET_NULL,
-		null=True,
-		blank=True,
-		related_name = "+",
-		verbose_name = "联系人"
-	)
-	address = models.ForeignKey(
-		Address,
-		on_delete=models.SET_NULL,
-		null=True,
-		blank=True,
-		related_name = "+",
-		verbose_name = "地址"
-	)
+class PriceCategory(models.Model):
+	description = models.CharField(max_length = 50)
 	
-	def __str__(self):
-		return self.lable
-	class Meta:
-		verbose_name = "场所"
-		verbose_name_plural = verbose_name
-
-'''
-class MerchandiseManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(deleted=False)
-'''
-
 class Merchandise(models.Model):
 	#filterout deleted objects
 	#objects = MerchandiseManager()
@@ -105,32 +60,6 @@ class Merchandise(models.Model):
 		return self.description
 
 
-class Certificate(models.Model):
-	CERTIFICATE_BY=(
-		("","N/A"),
-		("NJC","中国国家首饰质量检验检测中心(NJC)"),
-		("PSL","日本真珠科学研究所(PSL)"),
-		("PEPCA","日本真珠输出加工协同组合(PEPCA)"),
-		("PIC","日本真珠综合研究所(PIC)"),
-		("GIA","美国宝石学院(GIA)"),
-		("IGI","国际宝石学院(IGI)"),
-		("AGS","美国宝石学会(AGS)"),
-		("EGL","欧洲宝石学实验室(EGL)"),
-	)
-	issuer = models.CharField("颁发机构",max_length=5,default="",choices=CERTIFICATE_BY)
-	code = models.CharField("证书编号",max_length=50,default="",blank=True)
-	merchandise = models.ForeignKey(
-		Merchandise,
-		on_delete=models.CASCADE,
-		blank=False,
-		related_name = "certificate",
-		verbose_name = "证书",
-	)
-	def __str__(self):
-		return self.issuer+":"+code
-	class Meta:
-		verbose_name = "证书"
-		verbose_name_plural = verbose_name
 # chain or ring have size
 
 class Jewel(Merchandise):
@@ -167,7 +96,6 @@ class Jewel(Merchandise):
 		verbose_name = "成品"
 		verbose_name_plural = verbose_name
 	
-
 
 class Accessory(Merchandise):
 	METAL_TYPE = (
@@ -337,43 +265,4 @@ class ColoredGem(Gem):
 		proxy = True
 
 
-class PriceCategory(models.Model):
-	description = models.CharField(max_length = 50)
 
-
-#调货单
-class Transfer(models.Model):
-	datetime = models.DateTimeField("付款时间",default = timezone.now)
-	merchandise = models.ManyToManyField(Merchandise)
-	source = models.ForeignKey(
-		Depot,
-		on_delete=models.PROTECT,
-		blank=False,
-		related_name = "+",
-	)
-	destination = models.ForeignKey(
-		Depot,
-		on_delete=models.PROTECT,
-		blank=False,
-		related_name = "+",
-	)
-
-	def __str__(self):
-		return source.lable+"->"+destination.lable+":"+str(merchandise.objects.count())
-
-	class Meta:
-		verbose_name = "调货单"
-		verbose_name_plural = verbose_name
-
-
-#借货单
-class Lend(models.Model):
-	pass
-
-#加工单
-class Maintain(models.Model):
-	pass
-
-#盘点单
-class StockTake(models.Model):
-	pass
