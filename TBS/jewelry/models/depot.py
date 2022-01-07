@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
+from user import Person,Address
 
 class Depot(models.Model):
 	SUPPLIER = 'SL'
