@@ -32,7 +32,10 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+ #   'grappelli',
     'simpleui',
+    'computedfields',
+    'nested_admin',
     'user.apps.UserConfig',
     'jewelry.apps.JewelryConfig',
     'b2c.apps.B2CConfig',
@@ -122,11 +125,21 @@ USE_I18N = True
 USE_TZ = True
 
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+
+#STATIC_URL = 'tic/sta'
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static'
+
+STATICFILES_DIRS = (
+    BASE_DIR / "asset",
+    MEDIA_ROOT,
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -138,7 +151,7 @@ LOGIN_URL = '/login'
 SIMPLEUI_HOME_TITLE = 'GEMYARD'
 
 SIMPLEUI_HOME_ICON = 'fa fa-user'
-#SIMPLEUI_LOGO = 'https://avatars2.githubusercontent.com/u/13655483?s=60&v=4'
+SIMPLEUI_LOGO = '/'+STATIC_URL+'img/logo_white.png'
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_ANALYSIS = False
 
@@ -157,6 +170,8 @@ SIMPLEUI_ICON = {
     '顾客': 'fas fa-shopping-bag',
     '人员': 'fas fa-user-friends',
     '证书': 'fas fa-certificate',
+    '订单': 'fas fa-receipt',
+    '彩宝': 'fas fa-atom',
 }
 
 '''

@@ -47,13 +47,20 @@ class Depot(models.Model):
 		verbose_name = "场所"
 		verbose_name_plural = verbose_name
 
+'''
+class MerchandiseManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(deleted=False)
+'''
 
 class Merchandise(models.Model):
-	
-	img = models.ImageField("图像")
+	#filterout deleted objects
+	#objects = MerchandiseManager()
+
+	img = models.ImageField("图像",null=True, blank=True, upload_to="thumbnail/")
 
 	description = models.CharField("描述",max_length = 50)
-	net_weight = models.FloatField("净重")
+	net_weight = models.FloatField("净重",blank=True)
 
 	sku = models.CharField(
 		"款号",
@@ -63,20 +70,22 @@ class Merchandise(models.Model):
 					"套装成品拥有相同的sku;"+
 					"同款多件拥有相同的sku。"
 	)
-	sku_count = models.IntegerField("同款",default=1)
-	sku_description = models.CharField("款式",max_length=20)
 	
 	supplier = models.ForeignKey(
 		Depot,
 		on_delete=models.SET_NULL,
 		null=True,
+		blank=True,
 		related_name = "supplies",
 		verbose_name="供货商"
 	)
+
 	supply_date = models.DateTimeField("入库时间",default = timezone.now)
 	sku_by_supplier = models.CharField("厂家款号",max_length=20,blank=True)
-	manufacture = models.CharField("产地",max_length=10,blank=True)
+	
 	cost = models.FloatField("成本")
+
+	manufacture = models.CharField("产地",max_length=10,blank=True)
 	
 	depot = models.ForeignKey(
 		Depot,
@@ -85,14 +94,15 @@ class Merchandise(models.Model):
 		related_name = "instock",
 		verbose_name = "场所"
 	)
-	price = models.FloatField("标价")
-	margin = models.FloatField("价格浮动")
 
-	deleted = models.BooleanField(default=False)
+	position = models.CharField("库柜",max_length=20,blank=True)
+
+	price = models.FloatField("标价")
+	margin = models.FloatField("价格浮动",blank=True,default=0)
+
+	#deleted = models.BooleanField(default=False)
 	def __str__(self):
 		return self.description
-	#class Meta:
-	#	abstract = True
 
 
 class Certificate(models.Model):
@@ -107,8 +117,8 @@ class Certificate(models.Model):
 		("AGS","美国宝石学会(AGS)"),
 		("EGL","欧洲宝石学实验室(EGL)"),
 	)
-	issuer = models.CharField("颁发机构",max_length=5,default="")
-	code = models.CharField("证书编号",max_length=50,default="")
+	issuer = models.CharField("颁发机构",max_length=5,default="",choices=CERTIFICATE_BY)
+	code = models.CharField("证书编号",max_length=50,default="",blank=True)
 	merchandise = models.ForeignKey(
 		Merchandise,
 		on_delete=models.CASCADE,
@@ -121,6 +131,7 @@ class Certificate(models.Model):
 	class Meta:
 		verbose_name = "证书"
 		verbose_name_plural = verbose_name
+# chain or ring have size
 
 class Jewel(Merchandise):
 	JEWEL_TYPE = (
@@ -141,7 +152,7 @@ class Jewel(Merchandise):
 		("H","头饰"),
 	)
 	
-	jewel_type = models.CharField(max_length=5,choices=JEWEL_TYPE,default="")
+	jewel_type = models.CharField('类别',max_length=5,choices=JEWEL_TYPE,default="")
 	style = models.CharField(
 		"风格",
 		max_length = 100,
@@ -312,10 +323,18 @@ class Diamond(Gem):
 	)
 	cut = models.CharField("切工",max_length=2,choices=CUT,default="")
 	def __str__(self):
-		return "钻石"+"{.2f}".format(self.net_weight/0.2)+"ct"
+		return "钻石"+"{:.2f}".format(self.net_weight/0.2)+"ct"
 	class Meta:
 		verbose_name = "钻石"
 		verbose_name_plural = verbose_name
+
+class ColoredGem(Gem):
+	def __str__(self):
+		return "彩宝"
+	class Meta:
+		verbose_name = "彩宝"
+		verbose_name_plural = verbose_name
+		proxy = True
 
 
 class PriceCategory(models.Model):

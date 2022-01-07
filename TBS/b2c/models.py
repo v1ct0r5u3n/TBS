@@ -4,6 +4,7 @@ from datetime import date
 from django.utils import timezone
 from user.models import Person,Address,Customer,Employee
 from jewelry.models import Merchandise,Depot
+from computedfields.models import ComputedFieldsModel, computed
 
 # Create your models here.
 
@@ -19,11 +20,11 @@ class Order(models.Model):
 	)
 
 	order_date = models.DateTimeField("订单日期",default=timezone.now)
-	total_count = models.IntegerField("总件数")
-
+	last_change = models.DateTimeField('最后修改',default=timezone.now)
 	
-	deduct = models.FloatField("优惠金额")
-	total_value = models.FloatField("总价")
+	other_fee = models.DecimalField("其它",default=0,max_digits = 10,decimal_places = 2)
+	deduct = models.DecimalField("优惠金额",default=0,max_digits = 10,decimal_places = 2)
+	total_value = models.DecimalField("总价",max_digits = 10,decimal_places = 2)
 
 	comments = models.TextField("备注",blank = True,default = "",max_length=100)
 
@@ -45,10 +46,10 @@ class Package(models.Model):
 	track_no = models.CharField("运单号",blank = True,default = "",max_length=20)
 	gross_weight = models.FloatField("毛重",default=0)
 
-	ship_fee = models.FloatField("运费")
-	packaging = models.FloatField("包装费")
-	insurance = models.FloatField("保险")
-	other_fee = models.FloatField("其它")
+	ship_fee = models.DecimalField("运费",default=0,max_digits = 10,decimal_places = 2)
+	packaging = models.DecimalField("包装费",default=0,max_digits = 10,decimal_places = 2)
+	insurance = models.DecimalField("保险",default=0,max_digits = 10,decimal_places = 2)
+	other_fee = models.DecimalField("其它",default=0,max_digits = 10,decimal_places = 2)
 
 	def __str__(self):
 		return "包裹"
@@ -56,7 +57,7 @@ class Package(models.Model):
 		verbose_name = "包裹"
 		verbose_name_plural = verbose_name
 
-class SalesRecord(models.Model):
+class SalesRecord(ComputedFieldsModel):
 	merchandise = models.ForeignKey(
 		Merchandise,
 		null = True,
@@ -67,12 +68,18 @@ class SalesRecord(models.Model):
 	)
 	
 	#简单记录商品信息，一旦商品删除后销售记录仍然可查询
-	description = models.CharField("商品描述",max_length=100)
-	price = models.FloatField("标价",default=0)
+	#description = models.CharField("商品描述",max_length=100)
+	#price = models.FloatField("标价",default=0)
+	@computed(models.CharField("商品描述",max_length=100), depends=[['merchandise', ['description']]])
+	def description(self):
+		return merchandise.description()
+	@computed(models.DecimalField("标价",max_digits = 10,decimal_places = 2), depends=[['merchandise', ['price']]])
+	def price(self):
+		return merchandise.price()
 
 	#销售信息
-	deduct = models.FloatField("优惠",default=0)
-	actrual_price = models.FloatField("售价",default = 0)
+	#deduct = models.FloatField("优惠",default=0)
+	actrual_price = models.DecimalField("售价",default = 0,max_digits = 10,decimal_places = 2)
 
 	order = models.ForeignKey(
 		Order,
@@ -108,7 +115,7 @@ class Refund(models.Model):
 		verbose_name = "顾客"
 	)
 
-	actrual_price = models.FloatField("退款金额",default = 0)
+	actrual_price = models.DecimalField("退款金额",default = 0,max_digits = 10,decimal_places = 2)
 
 	def __str__(self):
 		return str(self.order_id)
@@ -163,7 +170,7 @@ class SalesShare(models.Model):
 		related_name="sales_share",
 		verbose_name="销售"
 	)
-	share = models.FloatField("销售分成")
+	share = models.DecimalField("销售分成%",max_digits = 4,decimal_places = 1)
 
 	def __str__(self):
 		return str(self.order.order_id)+":"+str(self.share*100)+r"%"
@@ -197,7 +204,7 @@ class Pay(models.Model):
 		("BLCE","店内余额"),
 	)
 	pay_type = models.CharField("付款方式",choices=PAY_TYPE,max_length=4)
-	amount = models.FloatField("付款金额")
+	amount = models.DecimalField("付款金额",max_digits = 10,decimal_places = 2)
 	pay_time = models.DateTimeField("付款时间",default = timezone.now)
 
 	order = models.ForeignKey(
