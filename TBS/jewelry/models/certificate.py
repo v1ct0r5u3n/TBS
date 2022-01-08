@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-
+from .merchandise import Merchandise
 
 class Certificate(models.Model):
 	CERTIFICATE_BY=(

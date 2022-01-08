@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from django.db import models
+
 class Area(models.Model):
 	name = models.CharField("名称",max_length=20)
 	parent=models.ForeignKey(

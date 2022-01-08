@@ -1,22 +1,25 @@
-from django.contrib import admin
+
 from .models import Order,Package,SalesRecord,Refund,RefundRecord,SalesShare,Pay
 from user.models import Customer
 from django.utils.html import mark_safe
 from jewelry.models import Merchandise
-import nested_admin
+from django.contrib import admin
+#import nested_admin as admin
+from nested_admin import NestedTabularInline as TabularInline
+from nested_admin import NestedModelAdmin as ModelAdmin
 # Register your models here.
 
 #admin.StackedInline
-class CustomerInline(nested_admin.NestedTabularInline):
+class CustomerInline(TabularInline):
 	model = Customer
 	extra = 1
 
-class MerchandiseInline(nested_admin.NestedTabularInline):
+class MerchandiseInline(TabularInline):
 	model = Merchandise
 	extra = 1
 	
 
-class SalesRecordInline(nested_admin.NestedTabularInline):
+class SalesRecordInline(TabularInline):
 	model = SalesRecord
 	extra = 1
 	#inlines = [MerchandiseInline]
@@ -27,17 +30,17 @@ class SalesRecordInline(nested_admin.NestedTabularInline):
 		return mark_safe('<img src="{url}" height=100 />'.format(url = obj.merchandise.img.url)
 	)
 
-class SalesShareInline(nested_admin.NestedTabularInline):
+class SalesShareInline(TabularInline):
     model = SalesShare
     extra = 1
 
-class PayInline(nested_admin.NestedTabularInline):
+class PayInline(TabularInline):
 	model = Pay
 	exclude = ("refund",)
 	extra = 0
 
 @admin.register(Order)
-class OrderAdmin(nested_admin.NestedModelAdmin):
+class OrderAdmin(ModelAdmin):
 #	date_hierarchy = 'order_date'
 
 	list_display = ['order_id','customer','order_date','merchandise_count','total_value']

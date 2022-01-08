@@ -3,11 +3,12 @@ from django.db import models
 from datetime import date
 from django.utils import timezone
 from user.models import Person,Address,Customer
+from .depot import Depot
 # Create your models here.
 
 class PriceCategory(models.Model):
 	description = models.CharField(max_length = 50)
-	
+
 class Merchandise(models.Model):
 	#filterout deleted objects
 	#objects = MerchandiseManager()

@@ -3,21 +3,65 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import AbstractBaseUser,BaseUserManager
 
 # Create your models here.
 
+class EmployeeManager(BaseUserManager):
+	def create_user(self,mobile,name,password=None):
+		if not mobile:
+			raise ValueError('员工必须有手机号')
+
+		user = self.model(
+			mobile = mobile,
+			name = name,
+		)
+
+		user.set_password(password)
+		user.save(using=self._db)
+		return user
+	def create_superuser(self,mobile,name,password=None):
+		user = self.create_user(
+			mobile,name,
+			password=password
+		)
+		user.is_admin = True
+		user.save(using=self._db)
+		return user
+
 class Person(models.Model):
 	name = models.CharField("姓名",max_length=20)
-	mobile = models.IntegerField("手机")
+	mobile = models.CharField("手机",max_length=20,unique = True)
 	wechat = models.CharField("微信号",max_length=50)
 	alipay = models.CharField("支付宝",max_length=50)
+	
 	def __str__(self):
 		return self.name
 
-class Employee(AbstractUser,Person):
+class Employee(AbstractBaseUser,Person):
 	'''员工.'''
+	objects = EmployeeManager()
+	is_active = models.BooleanField("在职",default=True)
+	is_admin = models.BooleanField("管理员",default=False)
+
 	USERNAME_FIELD = 'mobile'
-	user = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
+	REQUIRED_FIELDS = ['name']
+
+	def has_perm(self, perm, obj=None):
+		return True
+
+	def has_module_perms(self, app_label):
+		return True
+
+	@property
+	def is_staff(self):
+		"Is the user a member of staff?"
+		# Simplest possible answer: All admins are staff
+		return self.is_admin
+
+	def __str__(self):
+		return self.name
+
 	class Meta:
 		verbose_name = "员工"
 		verbose_name_plural = verbose_name
