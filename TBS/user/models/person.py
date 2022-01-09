@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import date
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -41,6 +42,11 @@ class Person(models.Model):
 class Employee(AbstractBaseUser,Person):
 	'''员工.'''
 	objects = EmployeeManager()
+
+	hire_date = models.DateField("入职时间",blank = False,default=date.today)
+	id_card_no = models.CharField("身份证号",max_length = 18,blank = True)
+	id_address = models.CharField("身份证地址",max_length = 100,blank = True)
+
 	is_active = models.BooleanField("在职",default=True)
 	is_admin = models.BooleanField("管理员",default=False)
 
@@ -51,13 +57,15 @@ class Employee(AbstractBaseUser,Person):
 		return True
 
 	def has_module_perms(self, app_label):
+		if app_label=='user':
+			return self.is_admin
 		return True
 
 	@property
 	def is_staff(self):
 		"Is the user a member of staff?"
 		# Simplest possible answer: All admins are staff
-		return self.is_admin
+		return self.is_active
 
 	def __str__(self):
 		return self.name

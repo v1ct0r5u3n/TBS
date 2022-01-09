@@ -56,6 +56,9 @@ class Merchandise(models.Model):
 	price = models.FloatField("标价")
 	margin = models.FloatField("价格浮动",blank=True,default=0)
 
+	is_tagged = models.BooleanField("打签",default=True)
+	is_sold = models.BooleanField("售出",default=False)
+
 	#deleted = models.BooleanField(default=False)
 	def __str__(self):
 		return self.description

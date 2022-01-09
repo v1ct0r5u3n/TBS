@@ -65,7 +65,7 @@ class EmployeeChangeForm(forms.ModelForm):
 
     class Meta:
         model = Employee
-        fields = ('name','mobile', 'is_active', 'is_admin')
+        fields = ('name','mobile','id_card_no','id_address','is_active', 'is_admin')
 
 
 class EmployeeAdmin(BaseUserAdmin):
@@ -79,7 +79,7 @@ class EmployeeAdmin(BaseUserAdmin):
     list_display = ('name','mobile','is_active','is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
-        (None, {'fields': ('name','mobile')}),
+        (None, {'fields': ('name','mobile','id_card_no','id_address')}),
         ('状态', {'fields': ('is_active','is_admin',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -87,7 +87,7 @@ class EmployeeAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('name','mobile','password1', 'password2'),
+            'fields': ('name','mobile','id_card_no','id_address','password1', 'password2'),
         }),
     )
     search_fields = ('name','mobile')
