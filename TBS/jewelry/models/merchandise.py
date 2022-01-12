@@ -16,7 +16,12 @@ class Merchandise(models.Model):
 	img = models.ImageField("图像",null=True, blank=True, upload_to="thumbnail/")
 
 	description = models.CharField("描述",max_length = 50)
-	net_weight = models.FloatField("净重",blank=True)
+	net_weight = models.FloatField("净重(g)",blank=True)
+
+	def carat(self):
+		return self.net_weight/0.2
+	carat.short_description = '克拉(Ct)'
+	carat.admin_order_field = 'net_weight'
 
 	sku = models.CharField(
 		"款号",
@@ -39,7 +44,7 @@ class Merchandise(models.Model):
 	supply_date = models.DateTimeField("入库时间",default = timezone.now)
 	sku_by_supplier = models.CharField("厂家款号",max_length=20,blank=True)
 	
-	cost = models.FloatField("成本")
+	cost = models.DecimalField("成本",default = 0,max_digits = 10,decimal_places = 2)
 
 	manufacture = models.CharField("产地",max_length=10,blank=True)
 	
@@ -53,8 +58,8 @@ class Merchandise(models.Model):
 
 	position = models.CharField("库柜",max_length=20,blank=True)
 
-	price = models.FloatField("标价")
-	margin = models.FloatField("价格浮动",blank=True,default=0)
+	price = models.DecimalField("标价",default = 0,max_digits = 10,decimal_places = 2)
+	margin = models.DecimalField("价格浮动",default = 0,max_digits = 10,decimal_places = 2)
 
 	is_tagged = models.BooleanField("打签",default=True)
 	is_sold = models.BooleanField("售出",default=False)
@@ -120,7 +125,14 @@ class Accessory(Merchandise):
 		("ALLO","合金"),
 		("","N/A")
 	)
-	metal_type = models.CharField(max_length=4,choices = METAL_TYPE,default="")
+	metal_type = models.CharField('金属',max_length=4,choices = METAL_TYPE,default="")
+	style = models.CharField(
+		"风格",
+		max_length = 100,
+		blank = True,
+		default = "",
+		help_text = "工艺或风格系列，例如花丝、满天星"
+	)
 	belongs_to_jewel = models.ForeignKey(
 		Jewel,
 		null = True,
@@ -139,27 +151,7 @@ class Accessory(Merchandise):
 
 
 class Gem(Merchandise):
-
-	belongs_to_accessory = models.ForeignKey(
-		Accessory,
-		null = True,
-		blank = True,
-		on_delete=models.SET_NULL,
-		related_name = "gem",
-		verbose_name = "所属空托或配件",
-		help_text = "如果是配石"
-	)
-
-	belongs_to_jewel = models.ForeignKey(
-		Jewel,
-		null = True,
-		blank = True,
-		on_delete = models.SET_NULL,
-		related_name = "gem",
-		verbose_name = "所属成品",
-		help_text = "如果是主石"
-	)
-
+	pass
 '''
 size, 直径
 shape, 形状
@@ -196,8 +188,8 @@ class Pearl(Gem):
 
 	pearl_type = models.CharField(max_length=4,choices=PEARL_TYPE,default="")
 
-	min_size = models.FloatField()
-	max_size = models.FloatField()
+	min_size = models.DecimalField("最小直径(mm)",default = 0,max_digits = 5,decimal_places = 2)
+	max_size = models.DecimalField("最大直径(mm)",default = 0,max_digits = 5,decimal_places = 2)
 
 	#color
 	body_color = models.CharField("体色",max_length=10)

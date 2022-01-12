@@ -12,7 +12,9 @@ from .models import Address,Employee,Customer,Person
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-	search_fields = ['name','mobile','wechat']
+	search_fields = ['name','alias','mobile']
+	list_display = ('__str__','mobile','balance','due','personal_manager')
+	list_display_links = ('__str__','mobile')
 
 #@admin.register(Employee)
 #class EmployeeAdmin(admin.ModelAdmin):
@@ -65,7 +67,7 @@ class EmployeeChangeForm(forms.ModelForm):
 
     class Meta:
         model = Employee
-        fields = ('name','mobile','id_card_no','id_address','is_active', 'is_admin')
+        fields = ('name','alias','mobile','id_card_no','id_address','is_active', 'is_admin')
 
 
 class EmployeeAdmin(BaseUserAdmin):
@@ -76,10 +78,10 @@ class EmployeeAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('name','mobile','is_active','is_admin')
+    list_display = ('name','alias','mobile','is_active','is_admin')
     list_filter = ('is_admin',)
     fieldsets = (
-        (None, {'fields': ('name','mobile','id_card_no','id_address')}),
+        (None, {'fields': ('name','alias','mobile','id_card_no','id_address')}),
         ('状态', {'fields': ('is_active','is_admin',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -87,10 +89,10 @@ class EmployeeAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('name','mobile','id_card_no','id_address','password1', 'password2'),
+            'fields': ('name','alias','mobile','id_card_no','id_address','password1', 'password2'),
         }),
     )
-    search_fields = ('name','mobile')
+    search_fields = ('name','alias','mobile')
     ordering = ('mobile',)
     filter_horizontal = ()
 

@@ -72,10 +72,11 @@ class SalesRecord(ComputedFieldsModel):
 	#price = models.FloatField("标价",default=0)
 	@computed(models.CharField("商品描述",max_length=100), depends=[['merchandise', ['description']]])
 	def description(self):
-		return merchandise.description()
+		return self.merchandise.description if(self.merchandise) else ""
+
 	@computed(models.DecimalField("标价",max_digits = 10,decimal_places = 2), depends=[['merchandise', ['price']]])
 	def price(self):
-		return merchandise.price()
+		return self.merchandise.price if self.merchandise else 0
 
 	#销售信息
 	#deduct = models.FloatField("优惠",default=0)
@@ -170,10 +171,10 @@ class SalesShare(models.Model):
 		related_name="sales_share",
 		verbose_name="销售"
 	)
-	share = models.DecimalField("销售分成%",max_digits = 4,decimal_places = 1)
+	share = models.DecimalField(r"销售分成(%)",max_digits = 4,decimal_places = 1)
 
 	def __str__(self):
-		return str(self.order.order_id)+":"+str(self.share*100)+r"%"
+		return str(self.employee)+":"+str(self.share)+r"%"
 
 	class Meta:
 		verbose_name = "销售分成"

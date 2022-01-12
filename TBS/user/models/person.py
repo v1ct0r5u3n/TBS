@@ -8,6 +8,18 @@ from django.contrib.auth.base_user import AbstractBaseUser,BaseUserManager
 
 # Create your models here.
 
+
+class Person(models.Model):
+	name = models.CharField("姓名",max_length=20,blank = True)
+	alias = models.CharField("称呼/别名",max_length=20,blank = True)
+	mobile = models.CharField("手机",max_length=20,unique = True)
+	wechat = models.CharField("微信号",max_length=50,blank = True)
+	alipay = models.CharField("支付宝",max_length=50,blank = True)
+	
+	def __str__(self):
+		return self.name or self.alias or self.mobile
+
+
 class EmployeeManager(BaseUserManager):
 	def create_user(self,mobile,name,password=None):
 		if not mobile:
@@ -29,15 +41,6 @@ class EmployeeManager(BaseUserManager):
 		user.is_admin = True
 		user.save(using=self._db)
 		return user
-
-class Person(models.Model):
-	name = models.CharField("姓名",max_length=20)
-	mobile = models.CharField("手机",max_length=20,unique = True)
-	wechat = models.CharField("微信号",max_length=50)
-	alipay = models.CharField("支付宝",max_length=50)
-	
-	def __str__(self):
-		return self.name
 
 class Employee(AbstractBaseUser,Person):
 	'''员工.'''
@@ -89,7 +92,7 @@ class Customer(Person):
 	balance = models.FloatField("余额",default=0)
 	due = models.FloatField("欠款",default=0)
 
-	Employee = models.ForeignKey(Employee,on_delete=models.SET_NULL,null=True,verbose_name="专属客服")
+	personal_manager = models.ForeignKey(Employee,on_delete=models.SET_NULL,null=True,verbose_name="专属客服")
 
 	class Meta:
 		verbose_name = "顾客"

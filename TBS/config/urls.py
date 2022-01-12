@@ -26,7 +26,6 @@ admin.site.site_title = "GEMYARD"
 admin.site.index_title = "GEMYARD"
 
 urlpatterns = [
-    path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('salary', include('salary.urls')),
     path('admin/', admin.site.urls),
  #   path('about/', TemplateView.as_view()),

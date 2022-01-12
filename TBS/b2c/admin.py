@@ -44,9 +44,11 @@ class OrderAdmin(ModelAdmin):
 #	date_hierarchy = 'order_date'
 
 	list_display = ['order_id','customer','order_date','merchandise_count','total_value']
+	date_hierarchy = 'order_date'
+	
 	readonly_fields = ['order_date','last_change','order_id','merchandise_count']
 	#autocomplete_fields = ['customer']
-	raw_id_fields = ["customer"]
+	autocomplete_fields = ["customer"]
 
 
 	fieldsets = [
@@ -63,12 +65,12 @@ class OrderAdmin(ModelAdmin):
 	
 
 #admin.site.register(Order,OrderAdmin)
-#admin.site.register(Package)
+admin.site.register(Package)
 #admin.site.register(SalesRecord)
 admin.site.register(Refund)
 #admin.site.register(RefundRecord)
 #admin.site.register(SalesShare)
-#admin.site.register(Pay)
+admin.site.register(Pay)
 '''
 def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "category":
