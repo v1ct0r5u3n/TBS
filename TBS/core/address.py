@@ -18,7 +18,6 @@ class Area(models.Model):
 
 
 class Address(models.Model):
-	default = models.BooleanField("默认地址",default=True)
 	lable = models.CharField("标签",max_length=20,blank=True,default="")
 
 	name = models.CharField("收货人",max_length=20)
@@ -32,6 +31,13 @@ class Address(models.Model):
 		verbose_name="上级省市区",
 	)
 	detail = models.CharField("详细地址",max_length=200)
+
+	def has_perm(self, perm, obj=None):
+		return True
+
+	def has_module_perms(self, app_label):
+		return True
+
 	def __str__(self):
 		return self.lable
 	class Meta:

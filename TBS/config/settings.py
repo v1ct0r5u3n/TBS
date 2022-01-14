@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
  #   'grappelli',
+    'rest_framework',
     'simpleui',
     'computedfields',
     'nested_admin',
@@ -171,9 +172,11 @@ SIMPLEUI_ICON = {
     '成品': 'fas fa-tag',
     '顾客': 'fas fa-shopping-bag',
     '人员': 'fas fa-user-friends',
-    '证书': 'fas fa-certificate',
+    #'证书': 'fas fa-certificate',
+    '证书': 'fas fa-award',
     '订单': 'fas fa-receipt',
     '彩宝': 'fas fa-atom',
+    '款式':'fas fa-crown',
 }
 
 '''

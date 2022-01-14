@@ -5,7 +5,7 @@ from django.contrib.auth.base_user import AbstractBaseUser,BaseUserManager
 # Register your models here.
 from .models import Address,Employee,Customer,Person
 
-#admin.site.register(Address)
+admin.site.register(Address)
 #admin.site.register(Employee)
 #admin.site.register(Customer)
 #admin.site.register(Person)

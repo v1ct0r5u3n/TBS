@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 from .depot import Depot
 from .certificate import Certificate
 from .merchandise import PriceCategory
-from .merchandise import Merchandise
+from .relationship import Record,MerchandiseRecord
+from .merchandise import Sku,Merchandise
 from .merchandise import Jewel,Accessory
 from .merchandise import Gem,Pearl,Diamond,ColoredGem

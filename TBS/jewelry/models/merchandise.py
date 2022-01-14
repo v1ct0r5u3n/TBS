@@ -4,12 +4,23 @@ from datetime import date
 from django.utils import timezone
 from user.models import Person,Address,Customer
 from .depot import Depot
+from core import TimeStampedMixin
 # Create your models here.
 
 class PriceCategory(models.Model):
 	description = models.CharField(max_length = 50)
 
-class Merchandise(models.Model):
+class Sku(models.Model):
+	sku = models.CharField("款号",max_length = 20)
+	description = models.CharField("描述",max_length = 50,blank=True)
+	def __str__(self):
+		return self.sku
+	class Meta:
+		verbose_name = "款式"
+		verbose_name_plural = verbose_name
+
+
+class Merchandise(models.Model,TimeStampedMixin):
 	#filterout deleted objects
 	#objects = MerchandiseManager()
 
@@ -23,30 +34,14 @@ class Merchandise(models.Model):
 	carat.short_description = '克拉(Ct)'
 	carat.admin_order_field = 'net_weight'
 
-	sku = models.CharField(
-		"款号",
-		max_length = 20,
-		help_text = "配对的两颗宝石拥有相同sku;"+
-					"整包裸石拥有相同的sku;"+
-					"套装成品拥有相同的sku;"+
-					"同款多件拥有相同的sku。"
-	)
-	
-	supplier = models.ForeignKey(
-		Depot,
+	sku = models.ForeignKey(
+		Sku,
 		on_delete=models.SET_NULL,
 		null=True,
 		blank=True,
-		related_name = "supplies",
-		verbose_name="供货商"
+		related_name='merchandise',
+		verbose_name='款式',
 	)
-
-	supply_date = models.DateTimeField("入库时间",default = timezone.now)
-	sku_by_supplier = models.CharField("厂家款号",max_length=20,blank=True)
-	
-	cost = models.DecimalField("成本",default = 0,max_digits = 10,decimal_places = 2)
-
-	manufacture = models.CharField("产地",max_length=10,blank=True)
 	
 	depot = models.ForeignKey(
 		Depot,
@@ -55,16 +50,18 @@ class Merchandise(models.Model):
 		related_name = "instock",
 		verbose_name = "场所"
 	)
-
 	position = models.CharField("库柜",max_length=20,blank=True)
 
 	price = models.DecimalField("标价",default = 0,max_digits = 10,decimal_places = 2)
 	margin = models.DecimalField("价格浮动",default = 0,max_digits = 10,decimal_places = 2)
 
-	is_tagged = models.BooleanField("打签",default=True)
-	is_sold = models.BooleanField("售出",default=False)
+	records = models.ManyToManyField(
+		Record,
+		on_delete=models.CASCADE,
+		through='MerchandiseRecord',
+		related_name='merchandises'
+	)
 
-	#deleted = models.BooleanField(default=False)
 	def __str__(self):
 		return self.description
 
@@ -91,13 +88,7 @@ class Jewel(Merchandise):
 	)
 	
 	jewel_type = models.CharField('类别',max_length=5,choices=JEWEL_TYPE,default="")
-	style = models.CharField(
-		"风格",
-		max_length = 100,
-		blank = True,
-		default = "",
-		help_text = "工艺或风格系列，例如花丝、满天星"
-	)
+	size = models.DecimalField('长度/手寸',default = 0,max_digits = 5,decimal_places = 2)
 
 	def __str__(self):
 		return "成品"+self.description
@@ -107,6 +98,10 @@ class Jewel(Merchandise):
 	
 
 class Accessory(Merchandise):
+
+	jewel_type = models.CharField('类别',max_length=5,choices=Jewel.JEWEL_TYPE,default="")
+	size = models.DecimalField('长度/手寸',default = 0,max_digits = 5,decimal_places = 2)
+
 	METAL_TYPE = (
 		("PT","铂金"),
 		("24KG","24K金"),
@@ -126,13 +121,7 @@ class Accessory(Merchandise):
 		("","N/A")
 	)
 	metal_type = models.CharField('金属',max_length=4,choices = METAL_TYPE,default="")
-	style = models.CharField(
-		"风格",
-		max_length = 100,
-		blank = True,
-		default = "",
-		help_text = "工艺或风格系列，例如花丝、满天星"
-	)
+
 	belongs_to_jewel = models.ForeignKey(
 		Jewel,
 		null = True,

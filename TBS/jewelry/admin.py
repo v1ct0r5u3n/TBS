@@ -1,11 +1,13 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Depot,Jewel,Accessory,Pearl,Diamond,Certificate,ColoredGem
+from .models import Depot,Sku,Jewel,Accessory,Pearl,Diamond,Certificate,ColoredGem
 from django.utils.html import mark_safe
 
+admin.site.register(Sku)
+
 class MerchandiseAdmin(admin.ModelAdmin):
-	list_filter = ['is_tagged','is_sold']
+	list_filter = []
 	def thumbnail(self,obj):
 		if obj.img:
 			return mark_safe('<img src="{url}" height=70 />'.format(url = obj.img.url))
@@ -52,9 +54,8 @@ admin.site.register(Jewel,MerchandiseAdmin,list_display=[
 			'sku',
 			'price',
 			'jewel_type',
-			'style',
 			'depot',
-			'is_tagged','is_sold','thumbnail',
+			'thumbnail',
 		]
 	)
 
@@ -63,9 +64,8 @@ admin.site.register(Accessory,MerchandiseAdmin,list_display=[
 			'sku',
 			'price',
 			'metal_type',
-			'style',
 			'depot',
-			'is_tagged','is_sold','thumbnail',
+			'thumbnail',
 		]
 	)
 admin.site.register(Pearl,MerchandiseAdmin,list_display=[
@@ -75,7 +75,7 @@ admin.site.register(Pearl,MerchandiseAdmin,list_display=[
 			'min_size',
 			'max_size',
 			'depot',
-			'is_tagged','is_sold','thumbnail',
+			'thumbnail',
 		]
 	)
 admin.site.register(Diamond,MerchandiseAdmin,list_display=[
@@ -87,7 +87,7 @@ admin.site.register(Diamond,MerchandiseAdmin,list_display=[
 			'clarity',
 			'cut',
 			'depot',
-			'is_tagged','is_sold','thumbnail',
+			'thumbnail',
 		]
 	)
 
@@ -97,6 +97,6 @@ admin.site.register(ColoredGem,MerchandiseAdmin,list_display=[
 			'carat',
 			'price',
 			'depot',
-			'is_tagged','is_sold','thumbnail',
+			'thumbnail',
 		]
 	)

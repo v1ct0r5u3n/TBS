@@ -19,7 +19,7 @@ class Depot(models.Model):
 
 	lable = models.CharField("名称",max_length=20)
 
-	depot_type = models.CharField(max_length=2,choices=DEPOT_TYPE,blank=False,default=WAREHOUSE)
+	depot_type = models.CharField("类型",max_length=2,choices=DEPOT_TYPE,blank=False,default=WAREHOUSE)
 	contact = models.ForeignKey(
 		Person,
 		on_delete=models.SET_NULL,
