@@ -2,10 +2,11 @@
 from django.db import models
 from .merchandise import Merchandise
 from core.mixins import TimeStampedMixin
-from core.models import Pay
+from core.models import Pay,Package
 from user.models import Employee
 
 class Record(TimeStampedMixin,models.Model):
+	img = models.ImageField("图像",null=True, blank=True, upload_to="transfer/")
 	operator = models.ForeignKey(Employee,on_delete=models.SET_NULL,null=True)
 	pays = models.ManyToManyField(Pay,through='RecordPay')
 
@@ -44,6 +45,37 @@ class Record(TimeStampedMixin,models.Model):
 	)
 	record_status = models.CharField(max_length=2,choices=RECORD_STATUS)
 
+	comments = models.TextField("备注",blank = True,default = "",max_length=100)
+
+	@property
+	def total_price(self):
+		return sum(merchandise.price for mechandise in self.merchandises)
+
+	@property
+	def total_value(self):
+		return sum(merchandiseorder.actrual_price for merchandiseorder in self.merchandiseorder_set)
+
+	@property
+	def total_pays(self):
+		return sum(recordpay.value for recordpay in self.orderpay_set)
+
+	@property
+	def is_shipped(self):
+		for merchandise in self.merchandises:
+			if merchandise.package is None:
+				return False
+		return True
+
+	@property
+	def is_signed(self):
+		for merchandise in self.merchandises:
+			if not mechandise.package or not mechandise.package.is_signed:
+				return False
+		return True
+
+	def is_balanced(self):
+		return self.total_pays >= self.total_value
+
 	def can_close(self):
 		return False
 
@@ -56,6 +88,7 @@ class MerchandiseRecord(models.Model):
 	record = models.ForeignKey(Record,on_delete=models.CASCADE)
 	merchandise = models.ForeignKey(Merchandise,on_delete=models.CASCADE)
 
+	package = models.ForeignKey(Package,on_delete=models.SET_NULL,null=True,blank=True,verbose_name='包裹')
 	price = models.DecimalField("价格",default = 0,max_digits = 10,decimal_places = 2)
 
 	to_merchandise = models.BooleanField(default=False)
@@ -67,64 +100,3 @@ class RecordPay(models.Model):
 
 	value = models.DecimalField(max_digits = 10,decimal_places = 2)
 
-
-'''
-class MerchandiseRecord(models.Model):
-	supplier = models.ForeignKey(
-		Depot,
-		on_delete=models.SET_NULL,
-		null=True,
-		blank=True,
-		related_name = "supplies",
-		verbose_name="供货商"
-	)
-
-	merchandise = models.ForeignKey()
-
-	sku_by_supplier = models.CharField("厂家款号",max_length=20,blank=True)
-	
-	cost = models.DecimalField("成本",default = 0,max_digits = 10,decimal_places = 2)
-	manufacture = models.CharField("产地",max_length=10,blank=True)
-
-	class Meta:
-		abstract = True
-
-
-#调货单
-class Transfer(models.Model):
-	datetime = models.DateTimeField("付款时间",default = timezone.now)
-	merchandise = models.ManyToManyField(Merchandise)
-	source = models.ForeignKey(
-		Depot,
-		on_delete=models.PROTECT,
-		blank=False,
-		related_name = "+",
-	)
-	destination = models.ForeignKey(
-		Depot,
-		on_delete=models.PROTECT,
-		blank=False,
-		related_name = "+",
-	)
-
-	def __str__(self):
-		return source.lable+"->"+destination.lable+":"+str(merchandise.objects.count())
-
-	class Meta:
-		verbose_name = "调货单"
-		verbose_name_plural = verbose_name
-
-
-#借货单
-class Lend(models.Model):
-	pass
-
-#加工单
-class Maintain(models.Model):
-	pass
-
-#盘点单
-class StockTake(models.Model):
-	pass
-
-'''

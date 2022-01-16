@@ -1,2 +1,2 @@
-from .order import Order,MerchandiseOrder,SalesShare
+from .order import Order,SalesShare
 from .refund import Refund

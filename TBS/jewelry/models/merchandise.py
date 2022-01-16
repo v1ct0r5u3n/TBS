@@ -59,6 +59,8 @@ class Merchandise(TimeStampedMixin,PartComposMixin,models.Model):
 	price = models.DecimalField("标价",default = 0,max_digits = 10,decimal_places = 2)
 	margin = models.DecimalField("价格浮动",default = 0,max_digits = 10,decimal_places = 2)
 
+	manufacture = models.CharField("产地",max_length=10,blank=True)
+
 	records = models.ManyToManyField(
 		'Record',
 		through='MerchandiseRecord',

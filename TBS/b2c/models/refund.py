@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from jewelry.models import Record,MerchandiseRecord
-from user.models import Customer
-from core.models import Package,Pay
-from core.mixins import TimeStampedMixin
+from jewelry.models import Record
+from .order import Order
 
 class Refund(Record):
-	customer = models.ForeignKey(
-		Customer,
-		null = True,
-		blank = True,
-		on_delete = models.SET_NULL,
-		related_name = "refund_record",
-		verbose_name = "顾客"
-	)
+	with_order = models.ForeignKey(Order,on_delete = models.CASCADE,verbose_name = "订单")
+
+	def can_close(self):
+		if not self.is_payed or self.is_signed:
+			return False
+		else:
+			for pay in self.pays:
+				if pay.img is None:
+					return False
+		return True
 
 	def __str__(self):
 		return str(self.id)
@@ -21,12 +21,3 @@ class Refund(Record):
 		verbose_name = "退货"
 		verbose_name_plural = verbose_name
 
-
-class MerchandiseRefund(MerchandiseRecord):
-	package = models.ForeignKey(Package,null = True,blank = True,on_delete = models.SET_NULL)
-
-	def __str__(self):
-		return "退货记录"
-	class Meta:
-		verbose_name = "退货记录"
-		verbose_name_plural = verbose_name

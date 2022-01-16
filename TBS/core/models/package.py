@@ -14,6 +14,7 @@ class Package(models.Model):
 	insurance = models.DecimalField("保险",default=0,max_digits = 10,decimal_places = 2)
 	other_fee = models.DecimalField("其它",default=0,max_digits = 10,decimal_places = 2)
 
+	is_payed_on_arrival = models.BooleanField("到付",default=False)
 	is_signed = models.BooleanField("签收",default=False)
 
 	def __str__(self):

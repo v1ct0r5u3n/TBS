@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'jewelry.apps.JewelryConfig',
     'b2c.apps.B2CConfig',
+    'b2b.apps.B2BConfig',
     'salary.apps.SalaryConfig',
     'django.contrib.admin',
     'django.contrib.auth',
