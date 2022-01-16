@@ -20,8 +20,8 @@ class Record(TimeStampedMixin,models.Model):
 	RECORD_TYPE_LEND = 'LD'
 	RECORD_TYPE_LEND_RETURN = 'LR'
 	RECORD_TYPE_TRANSFORM = 'TM'
-	RECORD_TYPE_REMAKE = 'RM'
-	RECORD_TYPE_COMPOSE = 'CP'
+	RECORD_TYPE_DISASSEMBLE = 'DA'
+	RECORD_TYPE_ASSEMBLE = 'AS'
 	
 	RECORD_TYPE = (
 		(RECORD_TYPE_IN,'入库单'),
@@ -33,8 +33,8 @@ class Record(TimeStampedMixin,models.Model):
 		(RECORD_TYPE_LEND,'借货单'),
 		(RECORD_TYPE_LEND_RETURN,'借货回货单'),
 		(RECORD_TYPE_TRANSFORM,'调货单'),
-		(RECORD_TYPE_REMAKE,'拆分单'),
-		(RECORD_TYPE_COMPOSE,'组合单'),
+		(RECORD_TYPE_DISASSEMBLE,'拆分单'),
+		(RECORD_TYPE_ASSEMBLE,'组合单'),
 	)
 	record_type = models.CharField(max_length=2,choices=RECORD_TYPE)
 	'''
@@ -90,9 +90,10 @@ class MerchandiseRecord(models.Model):
 	package = models.ForeignKey(Package,on_delete=models.SET_NULL,null=True,blank=True,verbose_name='包裹')
 	price = models.DecimalField("价格",default = 0,max_digits = 10,decimal_places = 2)
 
-	#Assuming record implies the direction
-	#to_merchandise = models.BooleanField(default=False)
-	
+	#Q:Can we assume record implies the direction
+	#A:Needed by assemble,which is merchandise(s)=>merchandise,or in disassemble vice versa.
+	to_merchandise = models.BooleanField(default=False)
+
 	comments = models.TextField("备注",blank = True,default = "",max_length=100)
 
 class RecordPay(models.Model):
