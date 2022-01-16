@@ -9,7 +9,8 @@ class Record(TimeStampedMixin,models.Model):
 	img = models.ImageField("图像",null=True, blank=True, upload_to="transfer/")
 	operator = models.ForeignKey(Employee,on_delete=models.SET_NULL,null=True)
 	pays = models.ManyToManyField(Pay,through='RecordPay')
-
+	comments = models.TextField("备注",blank = True,max_length=100)
+	'''
 	RECORD_TYPE_IN = 'IN'
 	RECORD_TYPE_OUT = 'OT'
 	RECORD_TYPE_SALE = 'SA'
@@ -36,7 +37,7 @@ class Record(TimeStampedMixin,models.Model):
 		(RECORD_TYPE_COMPOSE,'组合单'),
 	)
 	record_type = models.CharField(max_length=2,choices=RECORD_TYPE)
-
+	'''
 	RECORD_STATUS_NEW = 'N'
 	RECORD_STATUS_FINISHED = 'F'
 	RECORD_STATUS = (
@@ -44,8 +45,6 @@ class Record(TimeStampedMixin,models.Model):
 		(RECORD_STATUS_FINISHED,'完成'),
 	)
 	record_status = models.CharField(max_length=2,choices=RECORD_STATUS)
-
-	comments = models.TextField("备注",blank = True,default = "",max_length=100)
 
 	@property
 	def total_price(self):
@@ -91,7 +90,9 @@ class MerchandiseRecord(models.Model):
 	package = models.ForeignKey(Package,on_delete=models.SET_NULL,null=True,blank=True,verbose_name='包裹')
 	price = models.DecimalField("价格",default = 0,max_digits = 10,decimal_places = 2)
 
-	to_merchandise = models.BooleanField(default=False)
+	#Assuming record implies the direction
+	#to_merchandise = models.BooleanField(default=False)
+	
 	comments = models.TextField("备注",blank = True,default = "",max_length=100)
 
 class RecordPay(models.Model):

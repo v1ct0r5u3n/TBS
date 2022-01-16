@@ -20,17 +20,3 @@ class Stock(Record):
 		verbose_name_plural = verbose_name
 
 
-
-
-#借货单
-class Lend(models.Model):
-	pass
-
-#加工单
-class Maintain(models.Model):
-	pass
-
-#盘点单
-class StockTake(models.Model):
-	pass
-
