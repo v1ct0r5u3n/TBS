@@ -10,7 +10,7 @@ class Record(TimeStampedMixin,models.Model):
 	operator = models.ForeignKey(Employee,on_delete=models.SET_NULL,null=True)
 	pays = models.ManyToManyField(Pay,through='RecordPay')
 	comments = models.TextField("备注",blank = True,max_length=100)
-	'''
+	
 	RECORD_TYPE_IN = 'IN'
 	RECORD_TYPE_OUT = 'OT'
 	RECORD_TYPE_SALE = 'SA'
@@ -19,7 +19,8 @@ class Record(TimeStampedMixin,models.Model):
 	RECORD_TYPE_MAINTAIN_RETURN = 'MR'
 	RECORD_TYPE_LEND = 'LD'
 	RECORD_TYPE_LEND_RETURN = 'LR'
-	RECORD_TYPE_TRANSFORM = 'TM'
+	RECORD_TYPE_TRANSFER = 'TF'
+	RECORD_TYPE_TRANSFER_CONFIRM = 'TC'
 	RECORD_TYPE_DISASSEMBLE = 'DA'
 	RECORD_TYPE_ASSEMBLE = 'AS'
 	
@@ -32,12 +33,13 @@ class Record(TimeStampedMixin,models.Model):
 		(RECORD_TYPE_MAINTAIN_RETURN,'维修回货单'),
 		(RECORD_TYPE_LEND,'借货单'),
 		(RECORD_TYPE_LEND_RETURN,'借货回货单'),
-		(RECORD_TYPE_TRANSFORM,'调货单'),
+		(RECORD_TYPE_TRANSFER,'调货单'),
+		(RECORD_TYPE_TRANSFER_CONFIRM,'调货确认单'),
 		(RECORD_TYPE_DISASSEMBLE,'拆分单'),
-		(RECORD_TYPE_ASSEMBLE,'组合单'),
+		(RECORD_TYPE_ASSEMBLE,'组装单'),
 	)
 	record_type = models.CharField(max_length=2,choices=RECORD_TYPE)
-	'''
+	
 	RECORD_STATUS_NEW = 'N'
 	RECORD_STATUS_FINISHED = 'F'
 	RECORD_STATUS = (

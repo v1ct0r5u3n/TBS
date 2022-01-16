@@ -2,7 +2,7 @@
 from django.db import models
 from jewelry.models import Depot,Record
 
-
+'''
 #借货单
 class Lend(Record):
 	agent = models.ForeignKey(Depot,on_delete=models.CASCADE)
@@ -23,3 +23,4 @@ class LendReturn(Record):
 	class Meta:
 		verbose_name = "还货单"
 		verbose_name_plural = verbose_name
+'''

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from jewelry.models import Depot,Record
-
+'''
 class Stock(Record):
 	supplier = models.ForeignKey(
 		Depot,
@@ -20,3 +20,4 @@ class Stock(Record):
 		verbose_name_plural = verbose_name
 
 
+'''

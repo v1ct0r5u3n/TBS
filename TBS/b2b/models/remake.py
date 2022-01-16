@@ -2,6 +2,8 @@
 from django.db import models
 from jewelry.models import Depot,Record
 
+'''
+
 class Disassemble(Record):
 	manufacture = models.ForeignKey(Depot,on_delete=models.CASCADE)
 
@@ -21,3 +23,4 @@ class Assemble(Record):
 	class Meta:
 		verbose_name = "组装单"
 		verbose_name_plural = verbose_name
+'''

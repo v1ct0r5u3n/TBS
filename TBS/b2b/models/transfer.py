@@ -2,6 +2,7 @@
 from django.db import models
 from jewelry.models import Depot,Record
 
+'''
 #调货单
 class Transfer(Record):
 	source = models.ForeignKey(Depot,on_delete=models.CASCADE)
@@ -23,3 +24,4 @@ class TransferConfirm(Record):
 	class Meta:
 		verbose_name = "调货确认单"
 		verbose_name_plural = verbose_name
+'''
