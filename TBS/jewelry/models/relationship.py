@@ -1,23 +1,35 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from .merchandise import Merchandise
-from core import TimeStampedMixin
+from core.mixins import TimeStampedMixin
 
-class Record(models.Model,TimeStampedMixin):
+class Record(TimeStampedMixin,models.Model):
+	RECORD_TYPE_IN = 'IN'
+	RECORD_TYPE_OUT = 'OT'
+	RECORD_TYPE_SALE = 'SA'
+	RECORD_TYPE_REFUND = 'SR'
+	RECORD_TYPE_MAINTAIN = 'MT'
+	RECORD_TYPE_MAINTAIN_RETURN = 'MR'
+	RECORD_TYPE_LEND = 'LD'
+	RECORD_TYPE_LEND_RETURN = 'LR'
+	RECORD_TYPE_TRANSFORM = 'TM'
+	RECORD_TYPE_REMAKE = 'RM'
+	RECORD_TYPE_COMPOSE = 'CP'
+	
 	RECORD_TYPE = (
-		('IN','入库单'),
-		('OT','退库单'),
-		('SA','销售单'),
-		('SR','销售退货单'),
-		('MT','维修单'),
-		('MR','维修回货单'),
-		('LD','借货单'),
-		('LR','借货回货单'),
-		('SL','拆货单'),
-		('CB','组合单'),
-		('TM','调货单'),
+		(RECORD_TYPE_IN,'入库单'),
+		(RECORD_TYPE_OUT,'退库单'),
+		(RECORD_TYPE_SALE,'销售单'),
+		(RECORD_TYPE_REFUND,'销售退货单'),
+		(RECORD_TYPE_MAINTAIN,'维修单'),
+		(RECORD_TYPE_MAINTAIN_RETURN,'维修回货单'),
+		(RECORD_TYPE_LEND,'借货单'),
+		(RECORD_TYPE_LEND_RETURN,'借货回货单'),
+		(RECORD_TYPE_TRANSFORM,'调货单'),
+		(RECORD_TYPE_REMAKE,'拆分单'),
+		(RECORD_TYPE_COMPOSE,'组合单'),
 	)
-	record_type = models.CharField(max_length=2,choices=Record.RECORD_TYPE)
+	record_type = models.CharField(max_length=2,choices=RECORD_TYPE)
 
 	RECORD_STATUS_NEW = 'N'
 	RECORD_STATUS_FINISHED = 'F'
@@ -25,7 +37,7 @@ class Record(models.Model,TimeStampedMixin):
 		(RECORD_STATUS_NEW,'新建'),
 		(RECORD_STATUS_FINISHED,'完成'),
 	)
-	record_status = models.CharField(max_length=2,choices=Record.RECORD_STATUS)
+	record_status = models.CharField(max_length=2,choices=RECORD_STATUS)
 
 	def can_close(self):
 		return False
@@ -43,13 +55,6 @@ class MerchandiseRecord(models.Model):
 
 	to_merchandise = models.BooleanField(default=False)
 	comments = models.TextField("备注",blank = True,default = "",max_length=100)
-
-	def __init__(self,attrs):
-		if attrs is not None:
-			self.attrs = attrs.copy()
-		else:
-			self.attrs = {}
-
 
 
 '''

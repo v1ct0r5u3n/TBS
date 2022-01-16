@@ -2,14 +2,15 @@
 from django.db import models
 from datetime import date
 from django.utils import timezone
-from user.models import Person,Address,Customer,Employee
+from user.models import Person,Customer,Employee
 from jewelry.models import Record,MerchandiseRecord,Merchandise,Depot
 #from computedfields.models import ComputedFieldsModel, computed
-from core import TimeStampedMixin
+from core.models import Package
+from core.mixins import TimeStampedMixin
 
 # Create your models here.
 
-class Order(Record,TimeStampedMixin):
+class Order(Record):
 	'''订单.'''
 	order_id = models.BigAutoField("订单号",primary_key=True)
 	customer = models.ForeignKey(
@@ -22,7 +23,6 @@ class Order(Record,TimeStampedMixin):
 
 	employees = models.ManyToManyField(
 		Employee,
-		on_delete=models.CASCADE,
 		through='SalesShare',
 	)
 	
@@ -69,8 +69,9 @@ class Order(Record,TimeStampedMixin):
 		if not self.is_payed or self.is_signed:
 			return False
 		else:
-			for pay in self.pays if not pay.img:
-				return False
+			for pay in self.pays:
+				if pay.img is None:
+					return False
 		return True
 
 	def __str__(self):
@@ -122,6 +123,6 @@ class SalesShare(models.Model):
 		verbose_name = "销售分成"
 		verbose_name_plural = verbose_name
 
-def AddMerchandiseToOrder(Merchandise merchandises,Order order):
+def AddMerchandiseToOrder(merchandises,order):
 	return
 

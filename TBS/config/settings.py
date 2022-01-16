@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'simpleui',
     'computedfields',
     'nested_admin',
+    'core.apps.CoreConfig',
     'user.apps.UserConfig',
     'jewelry.apps.JewelryConfig',
     'b2c.apps.B2CConfig',

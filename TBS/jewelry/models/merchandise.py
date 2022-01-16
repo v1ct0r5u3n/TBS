@@ -2,13 +2,17 @@
 from django.db import models
 from datetime import date
 from django.utils import timezone
-from user.models import Person,Address,Customer
+from user.models import Person,Customer
 from .depot import Depot
-from core import TimeStampedMixin
+from core.models import Address
+from core.mixins import TimeStampedMixin,PartComposMixin
+#from .relationship import Record
 # Create your models here.
 
 class PriceCategory(models.Model):
 	description = models.CharField(max_length = 50)
+	#标价基础倍率
+	#提成
 
 class Sku(models.Model):
 	sku = models.CharField("款号",max_length = 20)
@@ -20,7 +24,7 @@ class Sku(models.Model):
 		verbose_name_plural = verbose_name
 
 
-class Merchandise(models.Model,TimeStampedMixin):
+class Merchandise(TimeStampedMixin,PartComposMixin,models.Model):
 	#filterout deleted objects
 	#objects = MerchandiseManager()
 
@@ -56,8 +60,7 @@ class Merchandise(models.Model,TimeStampedMixin):
 	margin = models.DecimalField("价格浮动",default = 0,max_digits = 10,decimal_places = 2)
 
 	records = models.ManyToManyField(
-		Record,
-		on_delete=models.CASCADE,
+		'Record',
 		through='MerchandiseRecord',
 		related_name='merchandises'
 	)
@@ -121,15 +124,6 @@ class Accessory(Merchandise):
 		("","N/A")
 	)
 	metal_type = models.CharField('金属',max_length=4,choices = METAL_TYPE,default="")
-
-	belongs_to_jewel = models.ForeignKey(
-		Jewel,
-		null = True,
-		blank = True,
-		on_delete = models.SET_NULL,
-		related_name = "accessory",
-		verbose_name = "所属成品",
-	)
 
 	def __str__(self):
 		return self.description

@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+from django.db import models
+from jewelry.models import Record,MerchandiseRecord
+from user.models import Customer
+from core.models import Package
+from core.mixins import TimeStampedMixin
 
-
-class Refund(Record,TimeStampedMixin):
-
-	date = models.DateTimeField("退货日期",default=timezone.now)
-	
+class Refund(Record):
 	customer = models.ForeignKey(
 		Customer,
 		null = True,
@@ -24,22 +25,6 @@ class Refund(Record,TimeStampedMixin):
 
 
 class MechandiseRefund(MerchandiseRecord):
-	refund = models.ForeignKey(
-		Refund,
-		on_delete = models.CASCADE,
-		blank = False,
-		related_name = "refund_record",
-		verbose_name = "退货申请"
-	)
-
-	sales_record = models.ForeignKey(
-		SalesRecord,
-		on_delete = models.CASCADE,
-		blank = False,
-		related_name = "refund_record",
-		verbose_name = "销售记录"
-	)
-	
 	package = models.ForeignKey(
 		Package,
 		null = True,

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.db import models
+
 class Package(models.Model):
 	ship_date = models.DateTimeField("发货日期",null = True,blank = True)
 	sign_date = models.DateTimeField("签收日期",null=True,blank = True)

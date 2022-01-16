@@ -1,5 +1,5 @@
 
-from .models import Order,Package,SalesRecord,Refund,RefundRecord,SalesShare,Pay
+from .models import Order,Refund,Pay
 from user.models import Customer
 from django.utils.html import mark_safe
 from jewelry.models import Merchandise
@@ -10,6 +10,7 @@ from nested_admin import NestedModelAdmin as ModelAdmin
 # Register your models here.
 
 #admin.StackedInline
+'''
 class CustomerInline(TabularInline):
 	model = Customer
 	extra = 1
@@ -45,7 +46,7 @@ class OrderAdmin(ModelAdmin):
 
 	list_display = ['order_id','customer','order_date','merchandise_count','total_value']
 	date_hierarchy = 'order_date'
-	
+
 	readonly_fields = ['order_date','last_change','order_id','merchandise_count']
 	#autocomplete_fields = ['customer']
 	autocomplete_fields = ["customer"]
@@ -57,15 +58,15 @@ class OrderAdmin(ModelAdmin):
 	    (None,{'fields': ('comments',)}),
 	]
 
-	inlines = [SalesRecordInline,SalesShareInline,PayInline]
+#	inlines = [SalesRecordInline,SalesShareInline,PayInline]
 
 	@admin.display(description='件数')
 	def merchandise_count(self,obj):
 		return obj.sales_record.count()
-	
+'''	
 
 #admin.site.register(Order,OrderAdmin)
-admin.site.register(Package)
+#admin.site.register(Package)
 #admin.site.register(SalesRecord)
 admin.site.register(Refund)
 #admin.site.register(RefundRecord)
