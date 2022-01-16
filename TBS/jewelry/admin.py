@@ -24,7 +24,6 @@ class JewelAdmin(MerchandiseAdmin):
 	list_display = ['description','sku','price','jewel_type','style','depot','is_tagged','is_sold','thumbnail',]
 
 
-
 @admin.register(Accessory)
 class AccessoryAdmin(MerchandiseAdmin):
 	list_display = ['description','sku','price','metal_type','style','depot','is_tagged','is_sold','thumbnail',]
@@ -46,6 +45,7 @@ class CertificateAdmin(MerchandiseAdmin):
 class ColoredGemAdmin(MerchandiseAdmin):
 	list_display = ['description','sku','price','metal_type','style','depot','is_tagged','is_sold','thumbnail',]
 '''
+
 admin.site.register(Depot,admin.ModelAdmin)
 admin.site.register(Certificate,admin.ModelAdmin)
 

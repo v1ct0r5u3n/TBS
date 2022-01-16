@@ -5,7 +5,7 @@ from django.utils import timezone
 from user.models import Person,Customer,Employee
 from jewelry.models import Record,MerchandiseRecord,Merchandise,Depot
 #from computedfields.models import ComputedFieldsModel, computed
-from core.models import Package
+from core.models import Package,Pay
 from core.mixins import TimeStampedMixin
 
 # Create your models here.
@@ -21,13 +21,11 @@ class Order(Record):
 		verbose_name = "顾客",
 	)
 
-	employees = models.ManyToManyField(
-		Employee,
-		through='SalesShare',
-	)
-	
 	other_fee = models.DecimalField("其它费用",default=0,max_digits = 10,decimal_places = 2)
 	deduct = models.DecimalField("优惠金额",default=0,max_digits = 10,decimal_places = 2)
+
+	#销售及分成
+	employees = models.ManyToManyField(Employee,through='SalesShare')
 
 	comments = models.TextField("备注",blank = True,default = "",max_length=100)
 
@@ -45,7 +43,7 @@ class Order(Record):
 
 	@property
 	def total_pays(self):
-		return sum(pay.value for pay in self.pays)
+		return sum(orderpay.value for orderpay in self.orderpay_set)
 
 	@property
 	def is_payed(self):
@@ -82,23 +80,9 @@ class Order(Record):
 		verbose_name_plural = verbose_name
 
 class MerchandiseOrder(MerchandiseRecord):
-	package = models.ForeignKey(
-		Package,
-		null = True,
-		blank = True,
-		on_delete=models.SET_NULL,
-		related_name = "sales_record",
-		verbose_name = "包裹"
-	)
+	package = models.ForeignKey(Package,null = True,blank = True,on_delete = models.SET_NULL)
 	actrual_price = models.DecimalField("售价",default = 0,max_digits = 10,decimal_places = 2)
-	def __init__(self,attrs = None):
-		to_merchandise = {'to_merchandise':False}
-		if attrs is None:
-			attrs = to_merchandise
-		else:
-			attrs.update(to_merchandise)
 
-		super(MerchandiseOrder,self).__init__(self,attrs)
 
 #销售分成
 class SalesShare(models.Model):
@@ -123,6 +107,7 @@ class SalesShare(models.Model):
 		verbose_name = "销售分成"
 		verbose_name_plural = verbose_name
 
+
 def AddMerchandiseToOrder(merchandises,order):
-	return
+	pass
 

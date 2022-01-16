@@ -1,5 +1,5 @@
 
-from .models import Order,Refund,Pay
+from .models import Order,Refund
 from user.models import Customer
 from django.utils.html import mark_safe
 from jewelry.models import Merchandise
@@ -71,7 +71,7 @@ class OrderAdmin(ModelAdmin):
 admin.site.register(Refund)
 #admin.site.register(RefundRecord)
 #admin.site.register(SalesShare)
-admin.site.register(Pay)
+
 '''
 def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "category":

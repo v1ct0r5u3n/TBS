@@ -2,8 +2,13 @@
 from django.db import models
 from .merchandise import Merchandise
 from core.mixins import TimeStampedMixin
+from core.models import Pay
+from user.models import Employee
 
 class Record(TimeStampedMixin,models.Model):
+	operator = models.ForeignKey(Employee,on_delete=models.SET_NULL,null=True)
+	pays = models.ManyToManyField(Pay,through='RecordPay')
+
 	RECORD_TYPE_IN = 'IN'
 	RECORD_TYPE_OUT = 'OT'
 	RECORD_TYPE_SALE = 'SA'
@@ -55,6 +60,12 @@ class MerchandiseRecord(models.Model):
 
 	to_merchandise = models.BooleanField(default=False)
 	comments = models.TextField("备注",blank = True,default = "",max_length=100)
+
+class RecordPay(models.Model):
+	pay = models.ForeignKey(Pay,on_delete=models.CASCADE)
+	record = models.ForeignKey(Record,on_delete=models.CASCADE)
+
+	value = models.DecimalField(max_digits = 10,decimal_places = 2)
 
 
 '''
