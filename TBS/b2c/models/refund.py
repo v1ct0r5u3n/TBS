@@ -24,7 +24,7 @@ class Refund(Record):
 		verbose_name_plural = verbose_name
 
 
-class MechandiseRefund(MerchandiseRecord):
+class MerchandiseRefund(MerchandiseRecord):
 	package = models.ForeignKey(
 		Package,
 		null = True,
