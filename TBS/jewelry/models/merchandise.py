@@ -5,7 +5,7 @@ from django.utils import timezone
 from user.models import Person,Customer
 from .depot import Depot
 from core.models import Address
-from core.mixins import TimeStampedMixin,PartComposMixin
+from core.mixins import TimeStampedMixin,PartComposMixin,ThumbnailWithPkAsFilenameMixin
 #from .relationship import Record
 # Create your models here.
 
@@ -24,11 +24,12 @@ class Sku(models.Model):
 		verbose_name_plural = verbose_name
 
 
-class Merchandise(TimeStampedMixin,PartComposMixin,models.Model):
+class Merchandise(	TimeStampedMixin,
+					ThumbnailWithPkAsFilenameMixin,
+					PartComposMixin,
+					models.Model):
 	#filterout deleted objects
 	#objects = MerchandiseManager()
-
-	img = models.ImageField("图像",null=True, blank=True, upload_to="thumbnail/")
 
 	description = models.CharField("描述",max_length = 50)
 	net_weight = models.FloatField("净重(g)",blank=True)

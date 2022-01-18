@@ -2,8 +2,9 @@
 from django.db import models
 from datetime import date
 from django.utils import timezone
+from core.mixins import TimeStampedMixin,ThumbnailWithPkAsFilenameMixin
 
-class Pay(models.Model):
+class Pay(TimeStampedMixin,ThumbnailWithPkAsFilenameMixin,models.Model):
 	is_income = models.BooleanField("收入",default=True)
 	PAY_TYPE = (
 		("CASH","现金"),
@@ -21,7 +22,6 @@ class Pay(models.Model):
 	value = models.DecimalField("付款金额",max_digits = 10,decimal_places = 2)
 	pay_time = models.DateTimeField("付款时间",default = timezone.now)
 
-	img = models.ImageField("截图",blank=True)
 	def __str__(self):
 		return str(self.order_id)
 	class Meta:

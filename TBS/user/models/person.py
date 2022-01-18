@@ -5,11 +5,12 @@ from django.contrib.auth.models import User
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import AbstractBaseUser,BaseUserManager
+from core.mixins import TimeStampedMixin
 
 # Create your models here.
 
 
-class Person(models.Model):
+class Person(TimeStampedMixin,models.Model):
 	name = models.CharField("姓名",max_length=20,blank = True)
 	alias = models.CharField("称呼/别名",max_length=20,blank = True)
 	mobile = models.CharField("手机",max_length=20,unique = True)

@@ -10,7 +10,7 @@ from nested_admin import NestedModelAdmin as ModelAdmin
 # Register your models here.
 
 #admin.StackedInline
-'''
+
 class CustomerInline(TabularInline):
 	model = Customer
 	extra = 1
@@ -18,12 +18,7 @@ class CustomerInline(TabularInline):
 class MerchandiseInline(TabularInline):
 	model = Merchandise
 	extra = 1
-	
 
-class SalesRecordInline(TabularInline):
-	model = SalesRecord
-	extra = 1
-	#inlines = [MerchandiseInline]
 	readonly_fields = ['thumbnail']
 
 	@admin.display(description='图像')
@@ -31,29 +26,21 @@ class SalesRecordInline(TabularInline):
 		return mark_safe('<img src="{url}" height=100 />'.format(url = obj.merchandise.img.url)
 	)
 
-class SalesShareInline(TabularInline):
-    model = SalesShare
-    extra = 1
-
-class PayInline(TabularInline):
-	model = Pay
-	exclude = ("refund",)
-	extra = 0
 
 @admin.register(Order)
 class OrderAdmin(ModelAdmin):
 #	date_hierarchy = 'order_date'
 
-	list_display = ['order_id','customer','order_date','merchandise_count','total_value']
-	date_hierarchy = 'order_date'
+	list_display = ['id','customer','created','merchandise_count','total_value']
+	date_hierarchy = 'created'
 
-	readonly_fields = ['order_date','last_change','order_id','merchandise_count']
+	readonly_fields = ['created','modified','id','merchandise_count']
 	#autocomplete_fields = ['customer']
 	autocomplete_fields = ["customer"]
 
 
 	fieldsets = [
-		(None, {'fields': (('order_date','last_change'),'order_id','customer',)}),
+		(None, {'fields': (('order_date','modified'),'id','customer',)}),
 	    ('总计',{'fields': (('deduct','total_value',),)}),
 	    (None,{'fields': ('comments',)}),
 	]
@@ -62,12 +49,13 @@ class OrderAdmin(ModelAdmin):
 
 	@admin.display(description='件数')
 	def merchandise_count(self,obj):
-		return obj.sales_record.count()
-'''	
+		return obj.merchandises.count()
+
 
 #admin.site.register(Order,OrderAdmin)
 #admin.site.register(Package)
 #admin.site.register(SalesRecord)
+
 admin.site.register(Refund)
 #admin.site.register(RefundRecord)
 #admin.site.register(SalesShare)

@@ -35,8 +35,6 @@ INSTALLED_APPS = [
  #   'grappelli',
     'rest_framework',
     'simpleui',
-    'computedfields',
-    'nested_admin',
     'core.apps.CoreConfig',
     'user.apps.UserConfig',
     'jewelry.apps.JewelryConfig',

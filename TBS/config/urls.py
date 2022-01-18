@@ -28,18 +28,9 @@ admin.site.index_title = "GEMYARD"
 urlpatterns = [
     path('salary', include('salary.urls')),
     path('admin/', admin.site.urls),
- #   path('about/', TemplateView.as_view()),
- #   static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    path('api/jewelry/',include('jewelry.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-#urlpatterns += static('/static/', document_root = 'static/')
-
-#if settings.DEBUG:
-#    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-#urlpatterns += [
-#    re_path(r'^media/(?P<path>.*)$','django.views.static.serve',{'document_root': settings.MEDIA_ROOT }),   
-#    re_path(r'^static/(?P<path>.*)$','django.views.static.serve',{'document_root':settings.STATIC_ROOT}),
-#]

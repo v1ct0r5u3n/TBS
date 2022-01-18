@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from .merchandise import Merchandise
+from core.mixins import ThumbnailWithPkAsFilenameMixin
 
-class Certificate(models.Model):
+class Certificate(ThumbnailWithPkAsFilenameMixin,models.Model):
 	CERTIFICATE_BY=(
 		("","N/A"),
 		("NJC","中国国家首饰质量检验检测中心(NJC)"),
