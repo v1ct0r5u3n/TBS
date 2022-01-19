@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 from django.db import models
 from .merchandise import Merchandise
-from core.mixins import TimeStampedMixin,ThumbnailWithPkAsFilenameMixin
+from core.mixins import TimeStampedMixin,ThumbnailMixin,OperatorMixin
 from core.models import Pay,Package
 from user.models import Employee
 
-class Record(TimeStampedMixin,ThumbnailWithPkAsFilenameMixin,models.Model):
-	operator = models.ForeignKey(Employee,on_delete=models.SET_NULL,null=True)
+class Record(	TimeStampedMixin,
+				ThumbnailMixin,
+				OperatorMixin,
+				models.Model):
 	pays = models.ManyToManyField(Pay,through='RecordPay')
 	comments = models.TextField("备注",blank = True,max_length=100)
 	

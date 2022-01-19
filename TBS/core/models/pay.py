@@ -2,9 +2,12 @@
 from django.db import models
 from datetime import date
 from django.utils import timezone
-from core.mixins import TimeStampedMixin,ThumbnailWithPkAsFilenameMixin
+from core.mixins import TimeStampedMixin,ThumbnailMixin,OperatorMixin
 
-class Pay(TimeStampedMixin,ThumbnailWithPkAsFilenameMixin,models.Model):
+class Pay(	TimeStampedMixin,
+			OperatorMixin,
+			ThumbnailMixin,
+			models.Model):
 	is_income = models.BooleanField("收入",default=True)
 	PAY_TYPE = (
 		("CASH","现金"),

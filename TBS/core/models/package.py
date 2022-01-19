@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from core.mixins import TimeStampedMixin
+from core.mixins import TimeStampedMixin,ThumbnailMixin,OperatorMixin
 
-class Package(TimeStampedMixin,models.Model):
+class Package(	TimeStampedMixin,
+				ThumbnailMixin,
+				OperatorMixin,
+				models.Model):
 	ship_date = models.DateTimeField("发货日期",null = True,blank = True)
 	sign_date = models.DateTimeField("签收日期",null=True,blank = True)
 

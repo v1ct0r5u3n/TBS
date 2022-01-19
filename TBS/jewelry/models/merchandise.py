@@ -5,7 +5,7 @@ from django.utils import timezone
 from user.models import Person,Customer
 from .depot import Depot
 from core.models import Address
-from core.mixins import TimeStampedMixin,PartComposMixin,ThumbnailWithPkAsFilenameMixin
+from core.mixins import TimeStampedMixin,PartComposMixin,ThumbnailMixin
 #from .relationship import Record
 # Create your models here.
 
@@ -25,7 +25,7 @@ class Sku(models.Model):
 
 
 class Merchandise(	TimeStampedMixin,
-					ThumbnailWithPkAsFilenameMixin,
+					ThumbnailMixin,
 					PartComposMixin,
 					models.Model):
 	#filterout deleted objects
