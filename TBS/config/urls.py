@@ -25,10 +25,18 @@ admin.site.site_header = "GEMYARD"
 admin.site.site_title = "GEMYARD"
 admin.site.index_title = "GEMYARD"
 
+api_url_patterns = [
+    path('jewelry/',include('jewelry.urls')),
+    path('user/',include('user.urls')),
+    path('core/',include('core.urls')),
+    path('b2b/',include('b2b.urls')),
+    path('b2c/',include('b2c.urls')),
+]
+
 urlpatterns = [
     path('salary', include('salary.urls')),
     path('admin/', admin.site.urls),
-    path('api/jewelry/',include('jewelry.urls')),
+    path('api/',include(api_url_patterns)),
 ]
 
 if settings.DEBUG:
