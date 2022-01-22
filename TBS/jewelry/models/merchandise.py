@@ -4,15 +4,13 @@ from datetime import date
 from django.utils import timezone
 from user.models import Person,Customer
 from .depot import Depot
+from .price_category import PriceCategory
 from core.models import Address
 from core.mixins import TimeStampedMixin,PartComposMixin,ThumbnailMixin
 #from .relationship import Record
 # Create your models here.
 
-class PriceCategory(models.Model):
-	description = models.CharField(max_length = 50)
-	#标价基础倍率
-	#提成
+
 
 class Sku(models.Model):
 	sku = models.CharField("款号",max_length = 20)
@@ -28,10 +26,8 @@ class Merchandise(	TimeStampedMixin,
 					ThumbnailMixin,
 					PartComposMixin,
 					models.Model):
-	#filterout deleted objects
-	#objects = MerchandiseManager()
-
 	description = models.CharField("描述",max_length = 50)
+	
 	net_weight = models.FloatField("净重(g)",blank=True)
 
 	def carat(self):
@@ -52,11 +48,16 @@ class Merchandise(	TimeStampedMixin,
 		Depot,
 		on_delete=models.SET_NULL,
 		null=True,
+		blank=True,
 		related_name = "instock",
 		verbose_name = "场所"
 	)
 	position = models.CharField("库柜",max_length=20,blank=True)
 
+	price_category = models.ForeignKey(
+		PriceCategory,
+		on_delete=models.CASCADE,
+	)
 	price = models.DecimalField("标价",default = 0,max_digits = 10,decimal_places = 2)
 	margin = models.DecimalField("价格浮动",default = 0,max_digits = 10,decimal_places = 2)
 
@@ -70,6 +71,10 @@ class Merchandise(	TimeStampedMixin,
 
 	def __str__(self):
 		return self.description
+
+	class Meta:
+		verbose_name = "商品"
+		verbose_name_plural = verbose_name
 
 
 # chain or ring have size

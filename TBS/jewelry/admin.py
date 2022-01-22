@@ -1,13 +1,49 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Depot,Sku,Jewel,Accessory,Pearl,Diamond,Certificate,ColoredGem
+from .models import *
+from core.models import Pay
 from django.utils.html import mark_safe
 
 admin.site.register(Sku)
+#admin.site.register(Record)
+#admin.site.register(MerchandiseRecord)
 
+#admin.site.register(RecordPay)
+
+@admin.register(MerchandiseRecord)
+class MerchandiseRecordAdmin(admin.ModelAdmin):
+	autocomplete_fields = ["merchandise",'record']
+
+class RecordPayInline(admin.TabularInline):
+	model = Record.pays.through
+
+class MerchandiseRecordInline(admin.TabularInline):
+	model = Merchandise.records.through
+	autocomplete_fields = ['record','merchandise']
+
+@admin.register(Record)
+class RecordAdmin(admin.ModelAdmin):
+	date_hierarchy = 'created'
+	search_fields = ['id']
+
+	#autocomplete_fields = ["merchandise"]
+
+	#fieldsets = [
+	#	(None, {'fields': (('order_date','modified'),'id','customer',)}),
+	#    ('总计',{'fields': (('deduct','total_value',),)}),
+	#    (None,{'fields': ('comments',)}),
+	#]
+
+	#inlines = [MerchandiseInline,SalesShareInline,PayInline]
+	inlines = [RecordPayInline,MerchandiseRecordInline]
+
+@admin.register(Merchandise)
 class MerchandiseAdmin(admin.ModelAdmin):
 	list_filter = []
+	inlines = [MerchandiseRecordInline]
+	search_fields = ['id']
+	autocomplete_fields = ['records']
 	def thumbnail(self,obj):
 		if obj.img:
 			return mark_safe('<img src="{url}" height=70 />'.format(url = obj.img.url))
@@ -17,8 +53,8 @@ class MerchandiseAdmin(admin.ModelAdmin):
 	#def get_deleted_objects(objs, request):
 	#	return None
 	
-	'''
 
+'''
 @admin.register(Jewel)
 class JewelAdmin(MerchandiseAdmin):
 	list_display = ['description','sku','price','jewel_type','style','depot','is_tagged','is_sold','thumbnail',]
@@ -100,3 +136,5 @@ admin.site.register(ColoredGem,MerchandiseAdmin,list_display=[
 			'thumbnail',
 		]
 	)
+
+

@@ -36,6 +36,33 @@ class Order(Record):
 	def __str__(self):
 		return str(self.id)
 
+	def add_merchandise(self,merchandise,package,price,comments):
+		self.save()
+		if merchandise:
+			merchandise.save()
+		MerchandiseRecord.objects.create(	order = self,
+											merchandise = merchandise,
+											package = package,
+											price = price,
+											comments = comments)
+
+	def add_sales_share(self,employee,share):
+		if(share>100):
+			raise OverflowError
+
+		total_share = 0
+		for ss in self.sales_share:
+			total_share += ss.share
+
+		if(total_share+share>100):
+			raise OverflowError
+
+		self.save()
+		SalesShare.objects.create(	order = self,
+									employee = employee,
+									share = share)
+
+
 	class Meta:
 		verbose_name = "订单"
 		verbose_name_plural = verbose_name

@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
+from jewelry.models import MerchandiseRecord
 
 
 def create_order(customer):
 	pass
 
 
-def add_merchandise_to_order(merchandise,order):
-	pass

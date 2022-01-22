@@ -1,51 +1,62 @@
 
-from .models import Order,Refund
+from .models import Order,Refund,SalesShare
+from jewelry.models import Record
 from user.models import Customer
+from core.models import Pay
+
 from django.utils.html import mark_safe
 from jewelry.models import Merchandise
 from django.contrib import admin
 #import nested_admin as admin
-from nested_admin import NestedTabularInline as TabularInline
-from nested_admin import NestedModelAdmin as ModelAdmin
+#from nested_admin import NestedTabularInline as TabularInline
+#from nested_admin import NestedModelAdmin as ModelAdmin
 # Register your models here.
 
+#admin.site.register(Order)
+admin.site.register(SalesShare)
 #admin.StackedInline
 
-class CustomerInline(TabularInline):
+class CustomerInline(admin.TabularInline):
 	model = Customer
 	extra = 1
 
-class MerchandiseInline(TabularInline):
-	model = Merchandise
+class MerchandiseInline(admin.StackedInline):
+	model = Merchandise.records.through
 	extra = 1
 
 	readonly_fields = ['thumbnail']
+	autocomplete_fields = ["merchandise",'record']
 
 	@admin.display(description='图像')
 	def thumbnail(self,obj):
 		return mark_safe('<img src="{url}" height=100 />'.format(url = obj.merchandise.img.url)
 	)
 
+class SalesShareInline(admin.TabularInline):
+	model = SalesShare
+	extra = 1
+
+class PayInline(admin.TabularInline):
+	model = Record.pays.through
+	extra = 1
+
 
 @admin.register(Order)
-class OrderAdmin(ModelAdmin):
-#	date_hierarchy = 'order_date'
-
-	list_display = ['id','customer','created','merchandise_count','total_value']
+class OrderAdmin(admin.ModelAdmin):
 	date_hierarchy = 'created'
 
 	readonly_fields = ['created','modified','id','merchandise_count']
 	#autocomplete_fields = ['customer']
 	autocomplete_fields = ["customer"]
 
-
+	'''
 	fieldsets = [
 		(None, {'fields': (('order_date','modified'),'id','customer',)}),
 	    ('总计',{'fields': (('deduct','total_value',),)}),
 	    (None,{'fields': ('comments',)}),
 	]
-
-#	inlines = [SalesRecordInline,SalesShareInline,PayInline]
+	'''
+	inlines = [MerchandiseInline,SalesShareInline,PayInline]
 
 	@admin.display(description='件数')
 	def merchandise_count(self,obj):

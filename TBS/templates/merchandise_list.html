@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}商品列表{% endblock %}
+
+{% block content %} 
+<table class="table table-striped table-hover table-sm">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">缩略图</th>
+      <th scope="col">描述</th>
+      <th scope="col">位置</th>
+      <th scope="col">价格</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for merchandise in merchandises %}
+
+
+    <tr valign="middle">
+      <th scope="row">{{merchandise.id|upper}}</th>
+      <td><img class="rounded shadow" src='{{merchandise.img.url}}' width="70"></td>
+      <td>{{merchandise.description|truncatewords:"20"}}</td>
+      <td>{{merchandise.depot}}</td>
+      <td>{{merchandise.price}}</td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
+
+<nav aria-label="Page navigation example">
+  <ul class="pagination justify-content-center">
+    <li class="page-item"><a class="page-link" href="#"><<</a></li>
+    <li class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">2</a></li>
+    <li class="page-item"><a class="page-link" href="#">3</a></li>
+    <li class="page-item"><a class="page-link" href="#">>></a></li>
+  </ul>
+</nav>
+
+{% endblock %}
+
+{% block side1%}
+<p><i class='fas fa-tag'></i>  全部</p>
+<p><i class='fas fa-crown'></i>  成品</p>
+<p><i class='fas fa-link'></i>  配件</p>
+<p><i class='fas fa-circle'></i>  珍珠</p>
+<p><i class ='fas fa-gem'></i>  钻石</p>
+<p><i class ='fas fa-atom'></i>  彩宝</p>
+{%endblock%}
+
+ {% block side2 %}
+<li>成品</li>
+<li>裸珠</li>
+<li>空托</li>
+<li>配件</li>
+<li>线上实价</li>
+<li>线上实价A</li>
+ {% endblock %}

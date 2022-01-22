@@ -90,6 +90,10 @@ class Record(	TimeStampedMixin,
 			self.record_status = RECORD_STATUS_NEW
 			#self.save()
 
+	class Meta:
+		verbose_name = "操作记录"
+		verbose_name_plural = verbose_name
+
 class MerchandiseRecord(models.Model):
 	record = models.ForeignKey(Record,on_delete=models.CASCADE)
 	merchandise = models.ForeignKey(Merchandise,on_delete=models.CASCADE)
@@ -103,9 +107,16 @@ class MerchandiseRecord(models.Model):
 
 	comments = models.TextField("备注",blank = True,default = "",max_length=100)
 
+	class Meta:
+		verbose_name = "商品操作记录"
+		verbose_name_plural = verbose_name
+
 class RecordPay(models.Model):
 	pay = models.ForeignKey(Pay,on_delete=models.CASCADE)
 	record = models.ForeignKey(Record,on_delete=models.CASCADE)
 
 	value = models.DecimalField(max_digits = 10,decimal_places = 2)
+	class Meta:
+		verbose_name = "付款记录"
+		verbose_name_plural = verbose_name
 
