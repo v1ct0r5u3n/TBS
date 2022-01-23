@@ -2,13 +2,15 @@
 {% block title %}商品列表{% endblock %}
 
 {% block content %} 
+
 <table class="table table-striped table-hover table-sm">
   <thead>
     <tr>
-      <th scope="col">#</th>
       <th scope="col">缩略图</th>
+      <th scope="col">#</th>
       <th scope="col">描述</th>
       <th scope="col">位置</th>
+      <th scope="col">价格类别</th>
       <th scope="col">价格</th>
     </tr>
   </thead>
@@ -17,10 +19,13 @@
 
 
     <tr valign="middle">
-      <th scope="row">{{merchandise.id|upper}}</th>
-      <td><img class="rounded shadow" src='{{merchandise.img.url}}' width="70"></td>
+      <td>
+        <img class="img-thumbnail rounded shadow" src='{{merchandise.img.url}}' width="70" serialId={{merchandise.serialId|upper}} description={{merchandise.description|truncatewords:"20"}}>
+      </td>
+      <th scope="row">{{merchandise.serialId|upper}}</th>
       <td>{{merchandise.description|truncatewords:"20"}}</td>
       <td>{{merchandise.depot}}</td>
+      <td>{{merchandise.price_category}}</td>
       <td>{{merchandise.price}}</td>
     </tr>
 
@@ -80,6 +85,13 @@
     {% endif %}
   </ul>
 </nav>
+
+
+
+
+
+
+
 
 {% endblock %}
 

@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import Http404, HttpResponseRedirect
 
+
 from .login_forms import EmployeeLoginForm
 
 # Create your views here.
@@ -24,7 +25,7 @@ class EmployeeLoginView(View):
 				login(request,employee)
 				request.session['uid'] = employee.id
 				request.session['mobile'] = employee.mobile
-				if employee.name:
+				if employee.name is not None:
 					request.session['name'] = employee.name
 				else:
 					request.session['name'] = employee.mobile
@@ -35,6 +36,11 @@ class EmployeeLoginView(View):
 
 		return render(request,'login.html',{'form':form})
 
+def Logout(request):
+	django_logout(request)
+	return HttpResponseRedirect('/login')
+
 class EmployeeIndexView(View):
 	def get(self,request):
 		return render(request,'base.html',{})
+

@@ -7,6 +7,7 @@ from .depot import Depot
 from .price_category import PriceCategory
 from core.models import Address
 from core.mixins import TimeStampedMixin,PartComposMixin,ThumbnailMixin
+from core.api import combine_datetime_pk
 #from .relationship import Record
 # Create your models here.
 
@@ -56,7 +57,7 @@ class Merchandise(	TimeStampedMixin,
 
 	price_category = models.ForeignKey(
 		PriceCategory,
-		on_delete=models.CASCADE,
+		on_delete=models.CASCADE
 	)
 	price = models.DecimalField("标价",default = 0,max_digits = 10,decimal_places = 2)
 	margin = models.DecimalField("价格浮动",default = 0,max_digits = 10,decimal_places = 2)
@@ -71,6 +72,9 @@ class Merchandise(	TimeStampedMixin,
 
 	def __str__(self):
 		return self.description
+
+	def serialId(self):
+		return combine_datetime_pk(self.id,12,self.created)
 
 	class Meta:
 		verbose_name = "商品"

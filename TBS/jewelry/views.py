@@ -16,7 +16,7 @@ from jewelry.models import Merchandise
 class JewelryListView(View):
 	def get(self,request):
 		merchandises = Merchandise.objects.all()
-		paginator = Paginator(merchandises, 100)
+		paginator = Paginator(merchandises, 10)
 		page_number = request.GET.get('page')
 		page_obj = paginator.get_page(page_number)
 

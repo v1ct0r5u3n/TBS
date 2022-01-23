@@ -19,7 +19,7 @@ from django.urls import include,path,re_path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from user.views import EmployeeLoginView,EmployeeIndexView
+from user.views import EmployeeLoginView,Logout,EmployeeIndexView
 from jewelry.views import JewelryListView
 
 
@@ -38,6 +38,7 @@ api_url_patterns = [
 urlpatterns = [
     path('',EmployeeIndexView.as_view()),
     path('login/',EmployeeLoginView.as_view()),
+    path('logout/',Logout),
     path('salary', include('salary.urls')),
     path('admin/', admin.site.urls),
     path('jewelry/Merchandise/list/',JewelryListView.as_view(),name="merchandise_list"),
