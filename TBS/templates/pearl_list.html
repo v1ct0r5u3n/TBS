@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}商品列表{% endblock %}
+{% block title %}成品列表{% endblock %}
 
 {% block nav-tabs %}
  <ul class="nav nav-tabs">
     <li class="nav-item">
-      <a class="nav-link active" href="{% url 'merchandise_list' %}">所有</a>
+      <a class="nav-link" href="{% url 'merchandise_list' %}">所有</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{% url 'jewel_list' %}">成品</a>
@@ -14,7 +14,7 @@
       <a class="nav-link" href="{% url 'accessory_list' %}">配件</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="{% url 'pearl_list' %}">裸珠</a>
+      <a class="nav-link active" href="{% url 'pearl_list' %}">裸珠</a>
     </li>
     <li class="nav-item">
       <a class="nav-link" href="{% url 'diamond_list' %}">钻石</a>
@@ -55,7 +55,7 @@
       <th scope="row">{{merchandise.serialId|upper}}</th>
       <td>{{merchandise.description|truncatewords:"20"}}</td>
       <td>{{merchandise.depot}}</td>
-      <td>{{merchandise.get_merchandise_type_display}}</td>
+      <td>{{merchandise.get_jewel_type_display}}</td>
       <td>{{merchandise.price_category}}</td>
       <td>{{merchandise.price}}</td>
     </tr>
@@ -165,74 +165,6 @@
       </div>
 </form>
 
-<!--
-<form method="get" action="">
-<div class="form-check form-switch">
-  <input class="form-check-input fileter_type_all" type="checkbox" role="switch" id="filter_all" checked>
-  <label class="form-check-label" for="filter_all">
-    <i class='fas fa-tag'></i>  全部
-  </label>
-</div>
-<hr>
-<div class="form-check form-switch">
-  <input class="form-check-input fileter_type" type="checkbox" role="switch" id="filter_jewel" name="type_filter" value="1" checked>
-  <label class="form-check-label" for="filter_jewel">
-    <i class='fas fa-crown'></i>  成品
-  </label>
-</div>
-<div class="form-check form-switch">
-  <input class="form-check-input fileter_type" type="checkbox" role="switch" id="filter_accessory" name="type_filter" value="2" checked>
-  <label class="form-check-label" for="filter_accessory">
-    <i class='fas fa-link'></i>  配件
-  </label>
-</div>
-<div class="form-check form-switch">
-  <input class="form-check-input fileter_type" type="checkbox" role="switch" id="filter_pearl" name="type_filter" value="3" checked>
-  <label class="form-check-label" for="filter_pearl">
-    <i class='fas fa-circle'></i>  珍珠
-  </label>
-</div>
-<div class="form-check form-switch">
-  <input class="form-check-input fileter_type" type="checkbox" role="switch" id="filter_diamond" name="type_filter" value="4" checked>
-  <label class="form-check-label" for="filter_diamond">
-    <i class ='fas fa-gem'></i>  钻石
-  </label>
-</div>
-<div class="form-check form-switch">
-  <input class="form-check-input fileter_type" type="checkbox" role="switch" id="filter_colored_gem" name="type_filter" value="5" checked>
-  <label class="form-check-label" for="filter_colored_gem">
-    <i class ='fas fa-atom'></i>  彩宝
-  </label>
-</div>
-<input type="submit" value="更新">
-</form>
-
-<script type="text/javascript">
-
-  $('.fileter_type_all').click(
-    function(){
-      $('.fileter_type').prop('checked',$(this).prop('checked'))
-    }
-  )
-
-
-</script>
--->
 
 {%endblock%}
 
- {% block side2 %}
-
- <input type="text" name="pay_time_0" value="2022/01/25" class="vDateField" size="10" required id="id_pay_time_0"><input type="hidden" name="initial-pay_time_0" value="2022/01/25" id="initial-id_pay_time_0">
-
-<div class="btn-group-vertical" role="group" aria-label="Basic checkbox toggle button group">
-  <input type="checkbox" class="btn-check btn-sm" id="btncheck1" autocomplete="off">
-  <label class="btn btn-primary" for="btncheck1">Checkbox 1</label>
-
-  <input type="checkbox" class="btn-check btn-sm" id="btncheck2" autocomplete="off">
-  <label class="btn btn-primary" for="btncheck2">Checkbox 2</label>
-
-  <input type="checkbox" class="btn-check btn-sm" id="btncheck3" autocomplete="off">
-  <label class="btn btn-primary" for="btncheck3">Checkbox 3</label>
-</div>
- {% endblock %}

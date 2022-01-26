@@ -3,24 +3,27 @@
 {% block title %}成品列表{% endblock %}
 
 {% block nav-tabs %}
-<ul class="nav nav-tabs">
+ <ul class="nav nav-tabs">
     <li class="nav-item">
       <a class="nav-link" href="{% url 'merchandise_list' %}">所有</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link active" aria-current="page" href="{% url 'jewel_list' %}">成品</a>
+      <a class="nav-link active" href="{% url 'jewel_list' %}">成品</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">配件</a>
+      <a class="nav-link" href="{% url 'accessory_list' %}">配件</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">裸珠</a>
+      <a class="nav-link" href="{% url 'pearl_list' %}">裸珠</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">钻石</a>
+      <a class="nav-link" href="{% url 'diamond_list' %}">钻石</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">彩宝</a>
+      <a class="nav-link" href="{% url 'colored_gem_list' %}">彩宝</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'other_list' %}">其它</a>
     </li>
 
   </ul>
@@ -35,6 +38,7 @@
       <th scope="col">缩略图</th>
       <th scope="col">#</th>
       <th scope="col">描述</th>
+      <th scope="col">长度/手寸</th>
       <th scope="col">位置</th>
       <th scope="col">类型</th>
       <th scope="col">价格类别</th>
@@ -51,6 +55,7 @@
       </td>
       <th scope="row">{{merchandise.serialId|upper}}</th>
       <td>{{merchandise.description|truncatewords:"20"}}</td>
+      <td>{{merchandise.size}}</td>
       <td>{{merchandise.depot}}</td>
       <td>{{merchandise.get_jewel_type_display}}</td>
       <td>{{merchandise.price_category}}</td>

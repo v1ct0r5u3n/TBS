@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from user.views import EmployeeLoginView,Logout,EmployeeIndexView
-from jewelry.views import JewelryListView,JewelListView
+from jewelry.views import JewelryListView,JewelListView,AccessoryListView,PearlListView,DiamondListView,ColoredGemListView,OtherListView
 
 
 admin.site.site_header = "GEMYARD"
@@ -41,9 +41,14 @@ urlpatterns = [
     path('logout/',Logout),
     path('salary', include('salary.urls')),
     path('admin/', admin.site.urls),
-    path('jewelry/Merchandise/list/',JewelryListView.as_view(),name="merchandise_list"),
-    path('jewelry/Jewel/list/',JewelListView.as_view(),name="jewel_list"),
     path('api/',include(api_url_patterns)),
+    path('jewelry/Merchandise/list/',JewelryListView.as_view(),name="merchandise_list"),
+    path('jewelry/Other/list/',OtherListView.as_view(),name="other_list"),
+    path('jewelry/Jewel/list/',JewelListView.as_view(),name="jewel_list"),
+    path('jewelry/Accessory/list/',AccessoryListView.as_view(),name="accessory_list"),
+    path('jewelry/Pearl/list/',PearlListView.as_view(),name="pearl_list"),
+    path('jewelry/Diamond/list/',DiamondListView.as_view(),name="diamond_list"),
+    path('jewelry/ColoredGem/list/',ColoredGemListView.as_view(),name="colored_gem_list"),
 ]
 
 if settings.DEBUG:

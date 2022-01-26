@@ -152,7 +152,7 @@ class Accessory(Merchandise):
 		("S925","S925"),
 		("GONB","铜镀金"),
 		("ALLO","合金"),
-		("","N/A")
+		("","其它")
 	)
 	metal_type = models.CharField('金属',max_length=4,choices = METAL_TYPE,default="")
 
@@ -181,7 +181,7 @@ nacre，珠层
 #巴洛克 keshi（无核）
 class Pearl(Gem):
 	PEARL_TYPE = (
-		("","N/A"),
+		("","其它"),
 		("海水珍珠",(
 				("AWHT","南洋白珍珠"),
 				("SSGD","南洋金珍珠"),
@@ -228,7 +228,7 @@ class Pearl(Gem):
 
 class Diamond(Gem):
 	COLOR = (
-		("","N/A"),
+		("","其它"),
 		("D","D"),
 		("E","E"),
 		("F","F"),
@@ -241,7 +241,7 @@ class Diamond(Gem):
 	color = models.CharField("颜色",max_length=1,choices=COLOR,default="")
 
 	CLARITY = (
-		("","N/A"),
+		("","其它"),
 		("FL","FL"),
 		("IF","IF"),
 		("VVS1","VVS1"),
@@ -254,7 +254,7 @@ class Diamond(Gem):
 	clarity = models.CharField("净度",max_length=4,choices=CLARITY,default="")
 
 	CUT = (
-		("","N/A"),
+		("","其它"),
 		("EX","EX"),
 		("VG","VG"),
 		("G","G"),

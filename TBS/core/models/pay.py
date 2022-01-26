@@ -26,7 +26,7 @@ class Pay(	TimeStampedMixin,
 	pay_time = models.DateTimeField("付款时间",default = timezone.now)
 
 	def __str__(self):
-		return str(self.order_id)
+		return str(self.value)
 	class Meta:
 		verbose_name = "付款"
 		verbose_name_plural = verbose_name	
