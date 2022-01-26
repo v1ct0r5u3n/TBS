@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'b2c.apps.B2CConfig',
     'b2b.apps.B2BConfig',
     'salary.apps.SalaryConfig',
+    'django_filters',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

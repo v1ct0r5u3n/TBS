@@ -57,7 +57,8 @@ class Merchandise(	TimeStampedMixin,
 
 	price_category = models.ForeignKey(
 		PriceCategory,
-		on_delete=models.CASCADE
+		on_delete=models.CASCADE,
+		verbose_name="价格类别",
 	)
 	price = models.DecimalField("标价",default = 0,max_digits = 10,decimal_places = 2)
 	margin = models.DecimalField("价格浮动",default = 0,max_digits = 10,decimal_places = 2)
@@ -70,6 +71,23 @@ class Merchandise(	TimeStampedMixin,
 		related_name='merchandises'
 	)
 
+	MT_JEWEL = 'JE'
+	MT_ACCESSORY = 'AC'
+	MT_PEARL = 'PE'
+	MT_DIAMOND = 'DM'
+	MT_COLORED_GEM = 'CG'
+	MT_OTHER = ''
+
+	MERCHANDISE_TYPE = (
+		(MT_JEWEL,'成品'),
+		(MT_ACCESSORY,'配件'),
+		(MT_PEARL,'裸珠'),
+		(MT_DIAMOND,'钻石'),
+		(MT_COLORED_GEM,'彩宝'),
+		(MT_OTHER,'其它')
+	)
+	merchandise_type = models.CharField("类型",max_length=4,choices=MERCHANDISE_TYPE,blank=True)
+
 	def __str__(self):
 		return self.description
 
@@ -79,13 +97,13 @@ class Merchandise(	TimeStampedMixin,
 	class Meta:
 		verbose_name = "商品"
 		verbose_name_plural = verbose_name
+		ordering = ['-id']
 
 
 # chain or ring have size
 
 class Jewel(Merchandise):
 	JEWEL_TYPE = (
-		("","N/A"),
 		("R","戒指"),
 		("项链",(
 			("P","项坠"),
@@ -100,6 +118,7 @@ class Jewel(Merchandise):
 		("W","手链"),
 		("B","胸针"),
 		("H","头饰"),
+		("","其它"),
 	)
 	
 	jewel_type = models.CharField('类别',max_length=5,choices=JEWEL_TYPE,default="")

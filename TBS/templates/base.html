@@ -6,9 +6,11 @@
   <title>{% block title %}{% endblock %}</title>
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script>
   <script src="{% static 'js/fontawesome.js' %}" data-auto-replace-svg="nest"></script>
+
   <meta name="theme-color" content="#7952b3">
   <link rel="shortcut icon" href="#" />
 </head>
@@ -51,97 +53,66 @@
           </li>
 
         </ul>
-</div>
-
-
-
-
-<form class="d-flex">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
-
-        <div class="d-flex">
-         <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex">
-          <li class="nav-item dropdown ">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              {% if request.session.uid %}{{ request.session.name }}{% else %}登 录{% endif %}
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="/logout/">注销</a></li>
-              <li><a class="dropdown-item" href="#">修改密码</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">密码登录</a></li>
-            </ul>
-          </li>
-        </ul>
       </div>
 
+      <form class="d-flex">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
 
-    </nav>
-    <div class="row m-3 ">
-      <div class="col-10">
-        <div class=" shadow p-3 mb-5 bg-body rounded">
-          {% block content %} 
+      <div class="d-flex">
+       <ul class="navbar-nav me-auto mb-2 mb-lg-0 d-flex">
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {% if request.session.uid %}{{ request.session.name }}{% else %}登 录{% endif %}
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <li><a class="dropdown-item" href="/logout/">注销</a></li>
+            <li><a class="dropdown-item" href="#">修改密码</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#">密码登录</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
 
+  </nav>
+{% block nav-tabs %}
+
+{% endblock %}
+ 
+
+
+  <div class="row m-3 ">
+    <div class="col-10">
+      <div class=" shadow p-3 mb-5 bg-body rounded">
+        {% block content %} 
+
+        {% endblock %}
+      </div>
+    </div>
+
+    <div class="col-2">
+      <div class="row">
+        <div class="shadow p-3 mb-5 bg-body rounded">
+          {% block side1 %}
+          <li>1</li>
+          <li>1</li>
+          <li>1</li>
+          <li>1</li>
+          <li>1</li>
           {% endblock %}
-        </div>
-      </div>
-
-      <div class="col-2">
-        <div class="row">
-          <div class="shadow p-3 mb-5 bg-body rounded">
-            {% block side1 %}
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
-            {% endblock %}
-          </div>
-        </div>
-        <div class="row">
-          <div class="shadow p-3 mb-5 bg-body rounded">
-            {% block side2 %}
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-            <li>2</li>
-            {% endblock %}
-          </div>
         </div>
       </div>
 
     </div>
 
-        <img class="img-thumbnail rounded shadow" src='/media/Jewel/WechatIMG124.jpeg' width="70" serialId="12345678" description="sdlfkjsdflkj">
-<script>
-  $(".img-thumbnail").click(
-    function() {
-        $('.imagepreview').attr('src', $(this).attr('src'));
-        document.getElementById("imagepreview_detail").innerHTML = $(this).attr('serialId')+"<br>"+$(this).attr('description');
-        $('#imagemodal').modal('show'); 
-}
-    )
-
-  </script>
-
-<div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" data-dismiss="modal">
-      <div class="modal-content"  >              
-        <div class="modal-body">
-             <img src="" class="imagepreview" style="width: 100%;" >
-        </div> 
-     <div class="modal-footer">
-       <div class="col-xs-12">
-           <p class="text-left" id="imagepreview_detail" align="right">1. line of description<br>2. line of description <br>3. line of description</p>
-       </div>
-     </div>         
-   </div>
- </div>
+  </div>
 
 
 
-  </body>
-  </html>
+
+
+
+</body>
+</html>

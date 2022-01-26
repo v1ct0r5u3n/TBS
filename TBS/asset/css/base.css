@@ -58,3 +58,24 @@ body {
     margin-left: 100px;
     width: 400px;
 }
+    .nav-tabs {
+      border-color:#1A3E5E;
+      background-color: #212529;
+    }
+
+    .nav-tabs > li.active > a {
+      color: #3c5a78;
+      font-size: 16px;
+    }
+    .nav-tabs > li > a {
+      color: #FFF;
+    }
+    .nav-tabs > li {
+      color: #FFF;
+      background-color: #888;
+      border: 1px solid #212529;
+      border-bottom-color: transparent;
+      border-top-right-radius: 5px;
+      border-top-left-radius: 5px;
+      border-bottom: 0px;
+    }

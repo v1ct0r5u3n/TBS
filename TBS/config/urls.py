@@ -20,7 +20,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from user.views import EmployeeLoginView,Logout,EmployeeIndexView
-from jewelry.views import JewelryListView
+from jewelry.views import JewelryListView,JewelListView
 
 
 admin.site.site_header = "GEMYARD"
@@ -42,6 +42,7 @@ urlpatterns = [
     path('salary', include('salary.urls')),
     path('admin/', admin.site.urls),
     path('jewelry/Merchandise/list/',JewelryListView.as_view(),name="merchandise_list"),
+    path('jewelry/Jewel/list/',JewelListView.as_view(),name="jewel_list"),
     path('api/',include(api_url_patterns)),
 ]
 

@@ -50,8 +50,8 @@ urlpatterns = [
 	path('Merchandise/',MerchandiseList.as_view(),name="Merchandise_list"),
 	path('Merchandise/<int:pk>/',MerchandiseDetail.as_view(),name="Merchandise_detail"),
 
-	path('Merchandise/Jewel/',JewelList.as_view(),name="jewel_list"),
-	path('Merchandise/Jewel/<int:pk>/',JewelDetail.as_view(),name="jewel_detail"),
+	path('Merchandise/Jewel/',JewelList.as_view(),name="Jewel_list"),
+	path('Merchandise/Jewel/<int:pk>/',JewelDetail.as_view(),name="Jewel_detail"),
 
 	path('Merchandise/Accessory/',AccessoryList.as_view(),name="Accessory_list"),
 	path('Merchandise/Accessory/<int:pk>/',AccessoryDetail.as_view(),name="Accessory_detail"),
