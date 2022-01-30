@@ -66,6 +66,7 @@ class Order(Record):
 	class Meta:
 		verbose_name = "订单"
 		verbose_name_plural = verbose_name
+		ordering = ['-id']
 
 
 #销售分成

@@ -21,6 +21,9 @@ from django.conf.urls.static import static
 
 from user.views import EmployeeLoginView,Logout,EmployeeIndexView
 from jewelry.views import JewelryListView,JewelListView,AccessoryListView,PearlListView,DiamondListView,ColoredGemListView,OtherListView
+from b2c.views import OrderListView
+
+from b2b.views import LendRecordListView
 
 
 admin.site.site_header = "GEMYARD"
@@ -49,6 +52,8 @@ urlpatterns = [
     path('jewelry/Pearl/list/',PearlListView.as_view(),name="pearl_list"),
     path('jewelry/Diamond/list/',DiamondListView.as_view(),name="diamond_list"),
     path('jewelry/ColoredGem/list/',ColoredGemListView.as_view(),name="colored_gem_list"),
+    path('b2c/order/list/',OrderListView.as_view(),name="order_list"),
+    path('b2b/lend_record/list/',LendRecordListView.as_view(),name='lend_record_list'),
 ]
 
 if settings.DEBUG:

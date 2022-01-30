@@ -123,18 +123,8 @@ class Jewel(Merchandise):
 	
 	jewel_type = models.CharField('类别',max_length=5,choices=JEWEL_TYPE,default="")
 	size = models.DecimalField('长度/手寸',default = 0,max_digits = 5,decimal_places = 2)
-
-	def __str__(self):
-		return "成品"+self.description
-	class Meta:
-		verbose_name = "成品"
-		verbose_name_plural = verbose_name
-	
-
-class Accessory(Merchandise):
-
-	jewel_type = models.CharField('类别',max_length=5,choices=Jewel.JEWEL_TYPE,default="")
-	size = models.DecimalField('长度/手寸',default = 0,max_digits = 5,decimal_places = 2)
+	major_gem = models.CharField('主石',max_length=20,blank=True,default='')
+	minor_gem = models.CharField('配石',max_length=20,blank=True,default='')
 
 	METAL_TYPE = (
 		("PT","铂金"),
@@ -155,6 +145,20 @@ class Accessory(Merchandise):
 		("","其它")
 	)
 	metal_type = models.CharField('金属',max_length=4,choices = METAL_TYPE,default="")
+
+	def __str__(self):
+		return "成品"+self.description
+	class Meta:
+		verbose_name = "成品"
+		verbose_name_plural = verbose_name
+	
+
+class Accessory(Merchandise):
+
+	jewel_type = models.CharField('类别',max_length=5,choices=Jewel.JEWEL_TYPE,default="")
+	size = models.DecimalField('长度/手寸',default = 0,max_digits = 5,decimal_places = 2)
+
+	metal_type = models.CharField('金属',max_length=4,choices = Jewel.METAL_TYPE,default="")
 
 	def __str__(self):
 		return self.description

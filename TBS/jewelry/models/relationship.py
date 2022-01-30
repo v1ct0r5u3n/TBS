@@ -54,28 +54,52 @@ class Record(	TimeStampedMixin,
 	record_status = models.CharField(max_length=2,choices=RECORD_STATUS)
 
 	@property
+	def total_count_of_merchandise(self):
+		return self.merchandises.count
+
+	@property
 	def total_price(self):
-		return sum(merchandise.price for mechandise in self.merchandises)
+		return sum(merchandise.price for merchandise in self.merchandises.all())
 
 	@property
 	def total_value(self):
-		return sum(merchandiseorder.actrual_price for merchandiseorder in self.merchandiseorder_set)
+		return sum(merchandiserecord.price for merchandiserecord in self.merchandiserecord_set.all())
+
+	@property
+	def total_count_of_pays(self):
+		return self.recordpay_set.count
 
 	@property
 	def total_pays(self):
-		return sum(recordpay.value for recordpay in self.orderpay_set)
+		return sum(recordpay.value for recordpay in self.recordpay_set.all())
+
+	@property
+	def total_unpay(self):
+		return self.total_value-self.total_pays
+
+	@property
+	def total_count_of_packages(self):
+		packages = set()
+		for merchandise in self.merchandises.all():
+			if merchandise.package is not None:
+				package.add(merchandise.package)
+
+		return len(packages)
+
 
 	@property
 	def is_shipped(self):
-		for merchandise in self.merchandises:
-			if merchandise.package is None:
+		for merchandiserecord in self.merchandiserecord_set.all():
+			if merchandiserecord.package is None:
+				return False
+			if merchandiserecord.package.ship_date is None:
 				return False
 		return True
 
 	@property
 	def is_signed(self):
-		for merchandise in self.merchandises:
-			if not mechandise.package or not mechandise.package.is_signed:
+		for merchandiserecord in self.merchandiserecord_set.all():
+			if not merchandiserecord.package or not merchandiserecord.package.is_signed:
 				return False
 		return True
 

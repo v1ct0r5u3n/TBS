@@ -7,10 +7,7 @@
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
-  <script src="{% static 'js/jquery.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'js/fontawesome.js' %}" data-auto-replace-svg="nest"></script>
-
+  
   <meta name="theme-color" content="#7952b3">
   <link rel="shortcut icon" href="#" />
 </head>
@@ -35,15 +32,23 @@
               商品
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="/jewelry/Merchandise/list/">查看</a></li>
+              <li><a class="dropdown-item" href="{% url 'merchandise_list' %}">查看</a></li>
               <li><hr class="dropdown-divider"></li>
 
               <li><a class="dropdown-item" href="#">入库</a></li>
               <li><a class="dropdown-item" href="#">退库</a></li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">订单</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              订单
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'order_list' %}">查看</a></li>
+              <li><hr class="dropdown-divider"></li>
+
+              <li><a class="dropdown-item" href="#">新订单</a></li>
+            </ul>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">包裹</a>
@@ -55,8 +60,23 @@
             <a class="nav-link" href="#">客户</a>
           </li>
 
-          <li class="nav-item">
-            <a class="nav-link" href="#">合作伙伴</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              合作伙伴
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="{% url 'lend_record_list' %}">借货单</a></li>
+              <li><a class="dropdown-item" href="#">借货确认单</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">调货单</a></li>
+              <li><a class="dropdown-item" href="#">调货确认单</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">维修单</a></li>
+              <li><a class="dropdown-item" href="#">维修回货单</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="#">拆分单</a></li>
+              <li><a class="dropdown-item" href="#">组装单</a></li>
+            </ul>
           </li>
 
         </ul>
@@ -120,6 +140,9 @@
 
 
 
+<script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/fontawesome.js' %}" data-auto-replace-svg="nest"></script>
 
 </body>
 </html>

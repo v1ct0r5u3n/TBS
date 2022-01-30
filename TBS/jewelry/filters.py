@@ -56,7 +56,7 @@ class AccessoryFilter(MerchandiseFilterBase):
 		widget=forms.CheckboxSelectMultiple(),
 	)
 	metal_type = django_filters.MultipleChoiceFilter(
-		choices = Accessory.METAL_TYPE,
+		choices = Jewel.METAL_TYPE,
 		widget=forms.CheckboxSelectMultiple(),
 	)
 	class Meta:
