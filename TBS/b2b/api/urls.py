@@ -1,7 +1,7 @@
 from django.urls import path,re_path
 
-from .api_views import B2BRecordList,B2BRecordDetail
-from .api_views import B2BConfirmList,B2BConfirmDetail
+from .views import B2BRecordList,B2BRecordDetail
+from .views import B2BConfirmList,B2BConfirmDetail
 
 urlpatterns = [
 	path('B2BRecord/',B2BRecordList.as_view(),name="B2BRecord_list"),

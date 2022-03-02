@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% block title %}商品列表{% endblock %}
+{%block media%}
+<script type="text/javascript" src="/my_admin/jsi18n/"></script>
+ <script type="text/javascript" src="/media/admin/js/core.js"></script>
+{{ filter.form.media }}
+
+{%endblock%}
 
 {% block nav-tabs %}
  <ul class="nav nav-tabs">
@@ -79,7 +85,7 @@
 
   <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" data-dismiss="modal">
-      <div class="modal-content"  >              
+      <div class="modal-content">              
         <div class="modal-body">
          <img src="" class="imagepreview" style="width: 100%;" >
        </div> 

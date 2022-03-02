@@ -1,9 +1,9 @@
 from django.urls import path,re_path
 
-from .api_views import PackageList,PackageDetail
-from .api_views import AreaList,AreaDetail
-from .api_views import AddressList,AddressDetail
-from .api_views import PayList,PayDetail
+from .views import PackageList,PackageDetail
+from .views import AreaList,AreaDetail
+from .views import AddressList,AddressDetail
+from .views import PayList,PayDetail
 
 urlpatterns = [
 	path('Package/',PackageList.as_view(),name="Package_list"),

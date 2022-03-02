@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
+from django.views.generic import DetailView
 from django.contrib.auth import authenticate, login , logout as django_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -39,3 +40,23 @@ class OrderListView(View):
 		page_obj = paginator.get_page(page_number)
 
 		return render(request,'order_list.html',{'orders':page_obj,'filter':ft})
+
+
+class OrderDetailView(DetailView):
+	model = Order
+
+	def get_context_data(self, **kwargs):
+		# Call the base implementation first to get a context
+		context = super().get_context_data(**kwargs)
+		self.order = get_object_or_404(Order, pk=self.kwargs['pk'])
+		context['customer'] = self.order.customer
+
+		return context
+
+from django.views.generic.edit import CreateView
+class OrderNew(CreateView):
+	model = Order
+    
+
+
+

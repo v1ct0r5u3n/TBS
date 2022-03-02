@@ -1,8 +1,8 @@
 from django.urls import path,re_path
 
-from .api_views import OrderList,OrderDetail
-from .api_views import SalesShareList,SalesShareDetail
-from .api_views import RefundList,RefundDetail
+from .views import OrderList,OrderDetail
+from .views import SalesShareList,SalesShareDetail
+from .views import RefundList,RefundDetail
 
 urlpatterns = [
 	path('Order/',OrderList.as_view(),name="Order_list"),

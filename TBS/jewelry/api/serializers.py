@@ -1,11 +1,11 @@
 from rest_framework import serializers
-from .models import Depot
-from .models import Certificate
-from .models import PriceCategory
-from .models import Record,MerchandiseRecord,RecordPay
-from .models import Sku,Merchandise
-from .models import Jewel,Accessory
-from .models import Gem,Pearl,Diamond,ColoredGem
+from jewelry.models import Depot
+from jewelry.models import Certificate
+from jewelry.models import PriceCategory
+from jewelry.models import Record,MerchandiseRecord,RecordPay
+from jewelry.models import Sku,Merchandise
+from jewelry.models import Jewel
+from jewelry.models import Gem,Pearl,Diamond,ColoredGem
 
 class DepotSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -55,7 +55,7 @@ class JewelSerializer(MerchandiseSerializer):
 
 class AccessorySerializer(MerchandiseSerializer):
 	class Meta:
-		model = Accessory
+		model = Jewel
 		fields = '__all__'
 
 class GemSerializer(MerchandiseSerializer):

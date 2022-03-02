@@ -22,7 +22,7 @@ class Package(	TimeStampedMixin,
 	is_signed = models.BooleanField("签收",default=False)
 
 	def __str__(self):
-		return "包裹"
+		return self.carrier + self.track_no
 	class Meta:
 		verbose_name = "包裹"
 		verbose_name_plural = verbose_name

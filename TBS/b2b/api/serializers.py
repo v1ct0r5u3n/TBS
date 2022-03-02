@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import B2BRecord,B2BConfirm
+from  b2b.models import B2BRecord,B2BConfirm
 
 class B2BRecordSerializer(serializers.ModelSerializer):
 	class Meta:

@@ -1,8 +1,8 @@
 from django.urls import path,re_path
 
-from .api_views import PersonList,PersonDetail
-from .api_views import EmployeeList,EmployeeDetail
-from .api_views import CustomerList,CustomerDetail
+from .views import PersonList,PersonDetail
+from .views import EmployeeList,EmployeeDetail
+from .views import CustomerList,CustomerDetail
 
 urlpatterns = [
 	path('Person/',PersonList.as_view(),name="Person_list"),

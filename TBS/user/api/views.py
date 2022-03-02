@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 
-from .models import Person,Employee,Customer
+from user.models import Person,Employee,Customer
 
 from .serializers import PersonSerializer
 from .serializers import EmployeeSerializer

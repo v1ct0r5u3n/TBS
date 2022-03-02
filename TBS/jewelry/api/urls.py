@@ -1,12 +1,12 @@
 from django.urls import path,re_path
 
-from .api_views import DepotList,DepotDetail
-from .api_views import CertificateList,CertificateDetail
-from .api_views import PriceCategoryList,PriceCategoryDetail
-from .api_views import RecordList,RecordDetail,MerchandiseRecordList,MerchandiseRecordDetail,RecordPayList,RecordPayDetail
-from .api_views import SkuList,SkuDetail,MerchandiseList,MerchandiseDetail
-from .api_views import JewelList,JewelDetail,AccessoryList,AccessoryDetail
-from .api_views import GemList,GemDetail,PearlList,PearlDetail,DiamondList,DiamondDetail,ColoredGemList,ColoredGemDetail
+from .views import DepotList,DepotDetail
+from .views import CertificateList,CertificateDetail
+from .views import PriceCategoryList,PriceCategoryDetail
+from .views import RecordList,RecordDetail,MerchandiseRecordList,MerchandiseRecordDetail,RecordPayList,RecordPayDetail
+from .views import SkuList,SkuDetail,MerchandiseList,MerchandiseDetail
+from .views import JewelList,JewelDetail,AccessoryList,AccessoryDetail
+from .views import GemList,GemDetail,PearlList,PearlDetail,DiamondList,DiamondDetail,ColoredGemList,ColoredGemDetail
 
 '''
 from django.views.decorators.http import require_http_methods

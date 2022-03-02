@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 
-from .models import B2BRecord,B2BConfirm
+from b2b.models import B2BRecord,B2BConfirm
 
 
 from .serializers import B2BRecordSerializer

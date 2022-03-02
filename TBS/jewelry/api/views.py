@@ -5,13 +5,13 @@ from rest_framework.response import Response
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 
-from .models import Depot
-from .models import Certificate
-from .models import PriceCategory
-from .models import Record,MerchandiseRecord,RecordPay
-from .models import Sku,Merchandise
-from .models import Jewel,Accessory
-from .models import Gem,Pearl,Diamond,ColoredGem
+from jewelry.models import Depot
+from jewelry.models import Certificate
+from jewelry.models import PriceCategory
+from jewelry.models import Record,MerchandiseRecord,RecordPay
+from jewelry.models import Sku,Merchandise
+from jewelry.models import Jewel
+from jewelry.models import Gem,Pearl,Diamond,ColoredGem
 
 from .serializers import DepotSerializer
 from .serializers import CertificateSerializer
@@ -95,11 +95,11 @@ class JewelDetail(generics.RetrieveDestroyAPIView):
 	serializer_class = JewelSerializer
 
 class AccessoryList(generics.ListCreateAPIView):
-	queryset = Accessory.objects.all()
+	queryset = Jewel.objects.all()
 	serializer_class = AccessorySerializer
 
 class AccessoryDetail(generics.RetrieveDestroyAPIView):
-	queryset = Accessory.objects.all()
+	queryset = Jewel.objects.all()
 	serializer_class = AccessorySerializer
 
 class GemList(generics.ListCreateAPIView):

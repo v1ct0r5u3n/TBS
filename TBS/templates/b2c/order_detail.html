@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+
+{% block title %}订单详情{% endblock %}
+
+
+{% block content %} 
+<a href="javascript:;" onclick="my_print()" class="btn btn-sm btn-white m-b-10 p-l-5 float: right"><i class="fa fa-print t-plus-1 fa-fw fa-lg"></i> Print</a>
+ <!--startprint-->
+<div class="container">
+<div class="row align-items-start">
+  <div class="col-sm-6">
+    顾客: {{ customer.name }}
+    <br>
+    别名: {{ customer.alias }}
+    <br>
+    手机: {{ customer.mobile }}
+    <br>
+    
+    <div class="row align-items-start small bg-secondary">
+    <div class="col-sm-6">
+    余额:{{ customer.balance }}
+    </div>
+    <div class="col-sm-6">
+    欠款:{{ customer.due }}
+    </div>
+
+  </div>
+  </div>
+  <div class="col-sm-6">
+    编号:{{ order.id }}
+    <br>
+    创建时间:{{ order.created }}
+    <br>
+    修改时间:{{ order.modified }}
+    <br>
+  </div>
+</div>
+<hr>
+<div class="row align-items-start">
+  <div class="col-sm-12">
+    备注: {% if order.comments %} {{ order.comments }} {% else %} 无 {% endif %}
+  </div>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">图像</th>
+      <th scope="col">描述</th>
+      <th scope="col">参数</th>
+      <th scope="col">标价</th>
+      <th scope="col">售价</th>
+      <th scope="col">包裹</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for merchandise_record in order.merchandiserecord_set.all %}
+    <tr>
+      <th>
+      <img class="gy-img-thumbnail rounded shadow" src='{{merchandise_record.merchandise.img.url}}' width="100" serialId={{merchandise_record.merchandise.serialId|upper}} description={{merchandise_record.merchandise.description|truncatewords:"20"}}>
+      </th>
+      <td scope="row">{{merchandise_record.merchandise.serialId}}
+        <br>
+      {{merchandise_record.merchandise.description}}
+      </td>
+      <td scope="row">
+      </td>
+      <td scope="row">
+        {{merchandise_record.merchandise.price}}</td>
+        <td scope="row">
+        {{merchandise_record.price}}<br>
+        <small>折扣:{% widthratio merchandise_record.price merchandise_record.merchandise.price 10 %}</small>
+      </td>
+      <td scope="row">{{merchandise_record.package}}</th>
+    </tr>
+    {% empty %}
+    hello
+    {% endfor %}
+    
+  </tbody>
+</table>
+
+<!--endprint-->
+  <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" data-dismiss="modal">
+      <div class="modal-content"  >              
+        <div class="modal-body">
+         <img src="" class="imagepreview" style="width: 100%;" >
+       </div> 
+       <div class="modal-footer">
+         <div class="col-xs-12">
+           <p class="text-left" id="imagepreview_detail" align="right">1. line of description<br>2. line of description <br>3. line of description</p>
+         </div>
+       </div>         
+     </div>
+   </div>
+ </div>
+
+ <script>
+  $(".gy-img-thumbnail").click(
+    function() {
+      $('.imagepreview').attr('src', $(this).attr('src'));
+      $('#imagepreview_detail').html($(this).attr('serialId')+"<br>"+$(this).attr('description'))
+      $('#imagemodal').modal('show'); 
+    }
+    )
+
+</script>
+<script>
+
+//打印
+
+        function my_print()
+
+            {  
+
+              //直接调用浏览器打印功能
+
+                bdhtml=window.document.body.innerHTML;
+
+               //定义打印区域起始字符，根据这个截取网页局部内容    
+
+               sprnstr="<!--startprint-->"; //打印区域开始的标记
+
+               eprnstr="<!--endprint-->";   //打印区域结束的标记  
+
+                prnhtml=bdhtml.substr(bdhtml.indexOf(sprnstr)+17);      
+
+                prnhtml=prnhtml.substring(0,prnhtml.indexOf(eprnstr));
+
+               //还原网页内容    
+
+                window.document.body.innerHTML=prnhtml;  
+
+               //开始打印
+
+                window.print();
+                window.document.body.innerHTML=bdhtml;
+
+            }
+
+ </script>
+
+
+</div>
+
+
+{% endblock %}
+
+{% block side1%}
+
+<div>销售分成:</div><br>
+{% for sales_share in order.sales_share.all %}
+{{ sales_share }} <br>
+{% endfor %}
+
+
+{%endblock%}
+

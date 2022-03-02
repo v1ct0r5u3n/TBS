@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
  #   'grappelli',
     'rest_framework',
-    'simpleui',
+ #   'simpleui',
     'user.apps.UserConfig',
     'core.apps.CoreConfig',
     'jewelry.apps.JewelryConfig',

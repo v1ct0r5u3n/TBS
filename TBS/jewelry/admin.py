@@ -95,15 +95,6 @@ admin.site.register(Jewel,MerchandiseAdmin,list_display=[
 		]
 	)
 
-admin.site.register(Accessory,MerchandiseAdmin,list_display=[
-			'description',
-			'sku',
-			'price',
-			'metal_type',
-			'depot',
-			'thumbnail',
-		]
-	)
 admin.site.register(Pearl,MerchandiseAdmin,list_display=[
 			'description',
 			'sku',

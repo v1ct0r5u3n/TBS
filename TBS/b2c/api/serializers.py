@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from .models import Order,SalesShare
-from .models import Refund
+from b2c.models import Order,SalesShare
+from b2c.models import Refund
 
 
 class OrderSerializer(serializers.ModelSerializer):

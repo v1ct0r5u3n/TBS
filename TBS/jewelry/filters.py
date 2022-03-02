@@ -1,21 +1,23 @@
 import django_filters
-from jewelry.models import Merchandise,PriceCategory,Jewel,Accessory,Pearl,Diamond,ColoredGem
+from jewelry.models import Merchandise,PriceCategory,Jewel,Pearl,Diamond,ColoredGem
 from django import forms
+from django.contrib.admin.widgets import AdminSplitDateTime
 
 class MerchandiseFilterBase(django_filters.FilterSet):
 	price_category = django_filters.ModelMultipleChoiceFilter(
 		queryset=PriceCategory.objects.all(),
 		widget=forms.CheckboxSelectMultiple(),
 	)
-	#start_date = django_filters.DateFilter(field_name='created',lookup_expr=('gt'),) 
+	#start_date = django_filters.DateFilter(field_name='created',lookup_expr=('gt'),widget=AdminTimeWidget) 
 	#end_date = django_filters.DateFilter(field_name='created',lookup_expr=('lt'))
 	#date_range = django_filters.DateFromToRangeFilter(field_name='created')
 	created = django_filters.DateFromToRangeFilter(
-		widget=forms.SplitDateTimeWidget(
-			attrs={
-				'class':'datepicker',
-				'type':'date',
-			}
+		widget = AdminSplitDateTime(
+	#	widget=forms.SplitDateTimeWidget(
+	#		attrs={
+	#			'class':'datepicker',
+	#			'type':'date',
+	#		}
 		)
 	)
 
@@ -60,7 +62,7 @@ class AccessoryFilter(MerchandiseFilterBase):
 		widget=forms.CheckboxSelectMultiple(),
 	)
 	class Meta:
-		model = Accessory
+		model = Jewel
 		fields = ['jewel_type','metal_type','price_category','created']
 
 class PearlFilter(MerchandiseFilterBase):

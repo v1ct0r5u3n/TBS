@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 
-from .models import Package
-from .models import Area,Address
-from .models import Pay
+from core.models import Package
+from core.models import Area,Address
+from core.models import Pay
 
 from .serializers import PackageSerializer
 from .serializers import AreaSerializer

@@ -7,9 +7,16 @@
   {% load static %}
   <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/fontawesome.js' %}" data-auto-replace-svg="nest"></script>
+
   
   <meta name="theme-color" content="#7952b3">
   <link rel="shortcut icon" href="#" />
+  {%block media%}{%endblock%}
 </head>
 <body>
   <div class="sticky-top">
@@ -138,11 +145,6 @@
 
 
 
-
-
-<script src="{% static 'js/jquery.min.js' %}"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}"></script>
-  <script src="{% static 'js/fontawesome.js' %}" data-auto-replace-svg="nest"></script>
 
 </body>
 </html>

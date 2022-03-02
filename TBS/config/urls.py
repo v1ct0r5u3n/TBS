@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 
 from user.views import EmployeeLoginView,Logout,EmployeeIndexView
 from jewelry.views import JewelryListView,JewelListView,AccessoryListView,PearlListView,DiamondListView,ColoredGemListView,OtherListView
-from b2c.views import OrderListView
+from b2c.views import OrderListView,OrderDetailView
 
 from b2b.views import LendRecordListView
 
@@ -31,11 +31,11 @@ admin.site.site_title = "GEMYARD"
 admin.site.index_title = "GEMYARD"
 
 api_url_patterns = [
-    path('jewelry/',include('jewelry.urls')),
-    path('user/',include('user.urls')),
-    path('core/',include('core.urls')),
-    path('b2b/',include('b2b.urls')),
-    path('b2c/',include('b2c.urls')),
+    path('jewelry/',include('jewelry.api.urls')),
+    path('user/',include('user.api.urls')),
+    path('core/',include('core.api.urls')),
+    path('b2b/',include('b2b.api.urls')),
+    path('b2c/',include('b2c.api.urls')),
 ]
 
 urlpatterns = [
@@ -53,6 +53,7 @@ urlpatterns = [
     path('jewelry/Diamond/list/',DiamondListView.as_view(),name="diamond_list"),
     path('jewelry/ColoredGem/list/',ColoredGemListView.as_view(),name="colored_gem_list"),
     path('b2c/order/list/',OrderListView.as_view(),name="order_list"),
+    path('b2c/order/<int:pk>/detail/',OrderDetailView.as_view(),name="order_detail"),
     path('b2b/lend_record/list/',LendRecordListView.as_view(),name='lend_record_list'),
 ]
 

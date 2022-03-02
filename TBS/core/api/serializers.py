@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
-from .models import Package
-from .models import Area,Address
-from .models import Pay
+from core.models import Package
+from core.models import Area,Address
+from core.models import Pay
 
 class PackageSerializer(serializers.ModelSerializer):
 	class Meta:

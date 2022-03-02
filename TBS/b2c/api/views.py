@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework import generics
 from django.shortcuts import get_object_or_404
 
-from .models import Order,SalesShare,Refund
+from b2c.models import Order,SalesShare,Refund
 
 from .serializers import OrderSerializer
 from .serializers import SalesShareSerializer

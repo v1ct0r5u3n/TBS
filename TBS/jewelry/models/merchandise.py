@@ -7,7 +7,7 @@ from .depot import Depot
 from .price_category import PriceCategory
 from core.models import Address
 from core.mixins import TimeStampedMixin,PartComposMixin,ThumbnailMixin
-from core.api import combine_datetime_pk
+from core.utils import combine_datetime_pk
 #from .relationship import Record
 # Create your models here.
 
@@ -28,6 +28,7 @@ class Merchandise(	TimeStampedMixin,
 					PartComposMixin,
 					models.Model):
 	description = models.CharField("描述",max_length = 50)
+	legacy_id = models.CharField("旧条码",max_length = 50,blank=True)
 	
 	net_weight = models.FloatField("净重(g)",blank=True)
 
@@ -94,6 +95,9 @@ class Merchandise(	TimeStampedMixin,
 	def serialId(self):
 		return combine_datetime_pk(self.id,12,self.created)
 
+	def get_merchandise_params(self):
+		return {}
+
 	class Meta:
 		verbose_name = "商品"
 		verbose_name_plural = verbose_name
@@ -145,27 +149,13 @@ class Jewel(Merchandise):
 		("","其它")
 	)
 	metal_type = models.CharField('金属',max_length=4,choices = METAL_TYPE,default="")
+	metal_weight = models.FloatField("金重(g)",blank=True,null=True)
 
 	def __str__(self):
 		return "成品"+self.description
 	class Meta:
 		verbose_name = "成品"
 		verbose_name_plural = verbose_name
-	
-
-class Accessory(Merchandise):
-
-	jewel_type = models.CharField('类别',max_length=5,choices=Jewel.JEWEL_TYPE,default="")
-	size = models.DecimalField('长度/手寸',default = 0,max_digits = 5,decimal_places = 2)
-
-	metal_type = models.CharField('金属',max_length=4,choices = Jewel.METAL_TYPE,default="")
-
-	def __str__(self):
-		return self.description
-	class Meta:
-		verbose_name = "配件"
-		verbose_name_plural = verbose_name
-	
 
 
 class Gem(Merchandise):
