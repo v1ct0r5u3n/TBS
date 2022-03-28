@@ -35,6 +35,7 @@ INSTALLED_APPS = [
  #   'grappelli',
     'rest_framework',
  #   'simpleui',
+    'dynamic_formsets',
     'user.apps.UserConfig',
     'core.apps.CoreConfig',
     'jewelry.apps.JewelryConfig',

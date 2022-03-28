@@ -2,6 +2,7 @@
 from django.db import models
 from user.models import Person
 from core.models import Address
+from .merchandise import Merchandise
 
 class Depot(models.Model):
 	SUPPLIER = 'SL'
@@ -42,4 +43,15 @@ class Depot(models.Model):
 		return self.lable
 	class Meta:
 		verbose_name = "场所"
+		verbose_name_plural = verbose_name
+
+
+class MerchandiseDepot(models.Model):
+	merchandise = models.ForeignKey(Merchandise,on_delete = models.CASCADE)
+	depot = models.ForeignKey(Depot,on_delete = models.CASCADE)
+
+	count = models.PositiveSmallIntegerField()
+
+	class Meta:
+		verbose_name = "库存"
 		verbose_name_plural = verbose_name

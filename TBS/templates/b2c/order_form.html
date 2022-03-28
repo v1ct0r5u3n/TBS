@@ -1,40 +1,57 @@
 {% extends "base.html" %}
+{% load static %}
 
-{% block title %}成品列表{% endblock %}
+{% block title %}订单{% endblock %}
 
-{% block nav-tabs %}
- <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'merchandise_list' %}">所有</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'jewel_list' %}">成品</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'accessory_list' %}">配件</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link active" href="{% url 'pearl_list' %}">裸珠</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'diamond_list' %}">钻石</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'colored_gem_list' %}">彩宝</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="{% url 'other_list' %}">其它</a>
-    </li>
 
-  </ul>
-{% endblock %}
 
 {% block content %} 
 
-<form method="post">{% csrf_token %}
+<form id = "order_form" method="post">{% csrf_token %}
+
     {{ form.as_p }}
-    <input type="submit" value="Update">
+
+    <div>商品清单</div>
+    <div class="merchandise-record-forms">
+          {% for merchandise in merchandises.forms %}
+          <div class="merchandise-record-form">
+          {% if merchandise.instance.pk %}{{ merchandise.DELETE }}{% endif %}
+            {{ merchandise.merchandise }} {{merchandise.price}} {{ merchandise.package }}{{ merchandise.comments }}
+          </div>
+          {% endfor %}
+        </div>
+
+      {{ merchandises.management_form }}
+      <p>
+
+      <div>销售分成</div>
+        <div class="sales-share-forms">
+          {% for share in sales_share.forms %}
+          <div class="sales-share-form">
+          {% if share.instance.pk %}{{ share.DELETE }}{% endif %}
+            {{ share.employee }} {{ share.share }}
+          </div>
+          {% endfor %}
+        </div>
+
+      {{ sales_share.management_form }}
+      <p>
+        <div>付款记录</div>
+        <div class="record-pays-forms">
+          {% for record_pay in record_pays.forms %}
+          <div class="record-pays-form">
+          {% if record_pay.instance.pk %}{{ record_pay.DELETE }}{% endif %}
+            {{ record_pay.pay }} {{ record_pay.value }}
+          </div>
+          {% endfor %}
+        </div>
+
+      {{ record_pays.management_form }}
+      <p>
+
+    <input type="submit" value="确定">
 </form>
+
 
 <script>
   $(".img-thumbnail").click(
@@ -45,7 +62,23 @@
     }
     )
 
+$(function() {
+        $('.merchandise-record-forms').formset({
+            prefix: '{{ merchandises.prefix }}'
+        });
+
+        $('.sales-share-forms').formset({
+            prefix: '{{ sales_share.prefix }}'
+        });
+
+        $('.record-pays-forms').formset({
+            prefix: '{{ record_pays.prefix }}'
+        });
+    })
+
+
   </script>
+
 
   <div class="modal fade" id="imagemodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" data-dismiss="modal">
@@ -61,6 +94,8 @@
      </div>
    </div>
  </div>
+
+ <script src="{% static 'dynamic_formsets/jquery.formset.js' %}" type="text/javascript"> </script>
 
 {% endblock %}
 

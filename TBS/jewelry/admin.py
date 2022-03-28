@@ -18,6 +18,9 @@ class MerchandiseRecordAdmin(admin.ModelAdmin):
 class RecordPayInline(admin.TabularInline):
 	model = Record.pays.through
 
+class MerchandiseDepotInline(admin.TabularInline):
+	model = Merchandise.depots.through
+
 class MerchandiseRecordInline(admin.TabularInline):
 	model = Merchandise.records.through
 	autocomplete_fields = ['record','merchandise']
@@ -90,7 +93,6 @@ admin.site.register(Jewel,MerchandiseAdmin,list_display=[
 			'sku',
 			'price',
 			'jewel_type',
-			'depot',
 			'thumbnail',
 		]
 	)
@@ -101,7 +103,6 @@ admin.site.register(Pearl,MerchandiseAdmin,list_display=[
 			'price',
 			'min_size',
 			'max_size',
-			'depot',
 			'thumbnail',
 		]
 	)
@@ -113,7 +114,6 @@ admin.site.register(Diamond,MerchandiseAdmin,list_display=[
 			'color',
 			'clarity',
 			'cut',
-			'depot',
 			'thumbnail',
 		]
 	)
@@ -123,7 +123,6 @@ admin.site.register(ColoredGem,MerchandiseAdmin,list_display=[
 			'sku',
 			'carat',
 			'price',
-			'depot',
 			'thumbnail',
 		]
 	)

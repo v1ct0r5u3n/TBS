@@ -19,7 +19,7 @@ class JewelryListView(View):
 		page_number = request.GET.get('page')
 		page_obj = paginator.get_page(page_number)
 
-		return render(request,'merchandise_list.html',{'merchandises':page_obj,'filter':ft})
+		return render(request,'jewelry/merchandise_list.html',{'merchandises':page_obj,'filter':ft})
 
 class JewelListView(View):
 	def get(self,request):
@@ -29,7 +29,7 @@ class JewelListView(View):
 		page_number = request.GET.get('page')
 		page_obj = paginator.get_page(page_number)
 
-		return render(request,'jewel_list.html',{'merchandises':page_obj,'filter':ft})
+		return render(request,'jewelry/jewel_list.html',{'merchandises':page_obj,'filter':ft})
 
 class AccessoryListView(View):
 	def get(self,request):
@@ -39,7 +39,7 @@ class AccessoryListView(View):
 		page_number = request.GET.get('page')
 		page_obj = paginator.get_page(page_number)
 
-		return render(request,'accessory_list.html',{'merchandises':page_obj,'filter':ft})
+		return render(request,'jewelry/accessory_list.html',{'merchandises':page_obj,'filter':ft})
 
 
 class PearlListView(View):
@@ -50,7 +50,7 @@ class PearlListView(View):
 		page_number = request.GET.get('page')
 		page_obj = paginator.get_page(page_number)
 
-		return render(request,'pearl_list.html',{'merchandises':page_obj,'filter':ft})
+		return render(request,'jewelry/pearl_list.html',{'merchandises':page_obj,'filter':ft})
 
 
 class DiamondListView(View):
@@ -61,7 +61,7 @@ class DiamondListView(View):
 		page_number = request.GET.get('page')
 		page_obj = paginator.get_page(page_number)
 
-		return render(request,'diamond_list.html',{'merchandises':page_obj,'filter':ft})
+		return render(request,'jewelry/diamond_list.html',{'merchandises':page_obj,'filter':ft})
 
 
 class ColoredGemListView(View):
@@ -72,7 +72,7 @@ class ColoredGemListView(View):
 		page_number = request.GET.get('page')
 		page_obj = paginator.get_page(page_number)
 
-		return render(request,'colored_gem_list.html',{'merchandises':page_obj,'filter':ft})
+		return render(request,'jewelry/colored_gem_list.html',{'merchandises':page_obj,'filter':ft})
 
 class OtherListView(View):
 	def get(self,request):
@@ -82,4 +82,4 @@ class OtherListView(View):
 		page_number = request.GET.get('page')
 		page_obj = paginator.get_page(page_number)
 
-		return render(request,'other_list.html',{'merchandises':page_obj,'filter':ft})
+		return render(request,'jewelry/other_list.html',{'merchandises':page_obj,'filter':ft})

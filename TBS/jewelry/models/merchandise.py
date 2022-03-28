@@ -3,7 +3,6 @@ from django.db import models
 from datetime import date
 from django.utils import timezone
 from user.models import Person,Customer
-from .depot import Depot
 from .price_category import PriceCategory
 from core.models import Address
 from core.mixins import TimeStampedMixin,PartComposMixin,ThumbnailMixin
@@ -46,13 +45,10 @@ class Merchandise(	TimeStampedMixin,
 		verbose_name='款式',
 	)
 	
-	depot = models.ForeignKey(
-		Depot,
-		on_delete=models.SET_NULL,
-		null=True,
-		blank=True,
-		related_name = "instock",
-		verbose_name = "场所"
+	depots = models.ManyToManyField(
+		'Depot',
+		through = 'MerchandiseDepot',
+		related_name = 'merchandise',
 	)
 	position = models.CharField("库柜",max_length=20,blank=True)
 
@@ -69,7 +65,7 @@ class Merchandise(	TimeStampedMixin,
 	records = models.ManyToManyField(
 		'Record',
 		through='MerchandiseRecord',
-		related_name='merchandises'
+		related_name='merchandises',
 	)
 
 	MT_JEWEL = 'JE'

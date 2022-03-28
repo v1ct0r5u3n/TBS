@@ -144,3 +144,7 @@ class RecordPay(models.Model):
 		verbose_name = "付款记录"
 		verbose_name_plural = verbose_name
 
+
+
+
+
